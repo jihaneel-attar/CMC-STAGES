@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sara Benani — CMC stages</title>
+  <meta name="description" content="Profil stagiaire sur CMC stages : niveau, série, activité et projets récents." />
+
+  <!-- Fonts (same as index.html) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS (CDN) + theme config (must stay in this order) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/tailwind.config.js"></script>
+
+  <!-- Shared styles first, then profile-only styles -->
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="profile.css" />
+</head>
+
+<body class="relative min-h-screen overflow-x-hidden bg-slate-950 font-sans text-white antialiased">
+
+  <!-- ============================================================
+       BACKGROUND: same blurred photo as the home page, with a navy
+       gradient overlay (light at the top, almost opaque at the bottom)
+  ============================================================ -->
+  <div class="fixed inset-0 -z-20 overflow-hidden" aria-hidden="true">
+    <div class="page-bg absolute inset-0"></div>
+  </div>
+  <div class="profile-overlay fixed inset-0 -z-10" aria-hidden="true"></div>
+
+  <div class="flex min-h-screen flex-col">
+
+    <!-- ============================================================
+         NAVBAR (same as index.html; js/profile.js puts it in the
+         logged-in state for this profile)
+    ============================================================ -->
+    <header class="site-header sticky top-0 z-20">
+      <nav class="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 sm:px-8" aria-label="Navigation principale">
+
+        <!-- Logo -->
+        <a href="index.html" class="site-logo rounded-md font-display text-2xl font-extrabold tracking-tight text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70">
+          CMC <span class="font-semibold text-white/80">stages</span>
+        </a>
+
+        <!-- Center links (desktop) -->
+        <ul class="absolute left-1/2 hidden -translate-x-1/2 items-center gap-9 lg:flex">
+          <li><a href="index.html" class="nav-link text-sm font-medium text-white/80 transition hover:text-white focus:outline-none focus-visible:text-white focus-visible:underline">Trouver un stage</a></li>
+          <li><a href="entreprise.html" class="nav-link text-sm font-medium text-white/80 transition hover:text-white focus:outline-none focus-visible:text-white focus-visible:underline">Pour les entreprises</a></li>
+          <li><a href="about.html" class="nav-link text-sm font-medium text-white/80 transition hover:text-white focus:outline-none focus-visible:text-white focus-visible:underline">À propos du CMC</a></li>
+        </ul>
+
+        <!-- Guest buttons (desktop): hidden here, kept so js/main.js works unchanged -->
+        <div class="hidden items-center gap-3 lg:flex" data-auth="guest">
+          <a href="index.html#login" class="glass rounded-full px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70">Connexion</a>
+          <a href="index.html#signup" class="site-cta rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-slate-900 shadow-lg shadow-black/20 transition hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900">Inscription</a>
+        </div>
+
+        <!-- Signed-in state (desktop) -->
+        <div class="hidden items-center gap-3 lg:flex" data-auth="user">
+          <a href="profile.html" class="user-pill glass" aria-current="page">
+            <span class="user-avatar" data-user="initial" aria-hidden="true"></span>
+            <span class="user-meta">
+              <span data-user="name"></span>
+              <span data-user="role"></span>
+            </span>
+          </a>
+          <button type="button" data-action="logout" class="glass rounded-full px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70">Déconnexion</button>
+        </div>
+
+        <!-- Menu button (mobile / tablet) -->
+        <button id="menu-toggle" type="button" class="glass inline-flex h-11 w-11 items-center justify-center rounded-full text-white transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70 lg:hidden" aria-controls="mobile-menu" aria-expanded="false" aria-label="Ouvrir le menu" data-label-open="Ouvrir le menu" data-label-close="Fermer le menu">
+          <svg id="icon-open" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+          <svg id="icon-close" class="hidden h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>
+        </button>
+      </nav>
+
+      <!-- Mobile menu panel -->
+      <div id="mobile-menu" class="absolute inset-x-0 top-full hidden px-5 sm:px-8 lg:hidden">
+        <div class="rounded-3xl border border-white/15 bg-slate-900/90 p-4 shadow-2xl shadow-black/40 backdrop-blur-xl">
+          <a href="index.html" class="block rounded-2xl px-4 py-3 text-base font-medium text-white/90 hover:bg-white/10">Trouver un stage</a>
+          <a href="entreprise.html" class="block rounded-2xl px-4 py-3 text-base font-medium text-white/90 hover:bg-white/10">Pour les entreprises</a>
+          <a href="about.html" class="block rounded-2xl px-4 py-3 text-base font-medium text-white/90 hover:bg-white/10">À propos du CMC</a>
+          <div class="mt-3 grid grid-cols-2 gap-3 border-t border-white/10 pt-4" data-auth="guest">
+            <a href="index.html#login" class="glass rounded-full px-4 py-2.5 text-center text-sm font-semibold text-white hover:bg-white/20">Connexion</a>
+            <a href="index.html#signup" class="rounded-full bg-white px-4 py-2.5 text-center text-sm font-semibold text-slate-900 hover:bg-slate-100">Inscription</a>
+          </div>
+          <div class="mt-3 flex items-center justify-between gap-3 border-t border-white/10 pt-4" data-auth="user">
+            <a href="profile.html" class="user-pill glass" aria-current="page">
+              <span class="user-avatar" data-user="initial" aria-hidden="true"></span>
+              <span class="user-meta">
+                <span data-user="name"></span>
+                <span data-user="role"></span>
+              </span>
+            </a>
+            <button type="button" data-action="logout" class="glass rounded-full px-4 py-2.5 text-sm font-semibold text-white hover:bg-white/20">Déconnexion</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ============================================================
+         PROFILE
+    ============================================================ -->
+    <main class="mx-auto w-full max-w-7xl flex-1 px-5 pb-16 pt-6 sm:px-8 sm:pt-10">
+
+      <!-- Profile header: directly on the background, no card -->
+      <section class="profile-head" aria-labelledby="profile-name">
+        <div class="profile-identity">
+          <div class="avatar-xl" data-sector="digital" aria-hidden="true">SB</div>
+
+          <div class="min-w-0">
+            <h1 id="profile-name" class="font-display text-4xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-[56px]">
+              Sara Benani
+            </h1>
+
+            <div class="profile-chips">
+              <span class="pchip glass" data-sector="digital">
+                <span class="pchip-dot" aria-hidden="true"></span>
+                Digital &amp; IA · Digital Design
+              </span>
+              <span class="pchip-divider" aria-hidden="true"></span>
+              <span class="pchip glass">Figma</span>
+              <span class="pchip glass">UI/UX</span>
+              <span class="pchip glass">Prototype</span>
+              <button type="button" class="pchip pchip-add glass" aria-label="Ajouter une compétence" data-owner-only>+ Compétence</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Owner controls; with ?view=public js/profile.js hides them and shows the recruiter button -->
+        <a href="#" class="btn-white rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-900 shadow-lg shadow-black/20 transition hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900" data-owner-only>
+          + Ajouter un projet
+        </a>
+        <a href="#" class="btn-white rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-900 shadow-lg shadow-black/20 transition hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900" data-public-only hidden>
+          Proposer un stage
+        </a>
+      </section>
+
+      <!-- Two columns: level + streak on the left, activity on the right -->
+      <section class="profile-grid" aria-label="Progression">
+
+        <div class="profile-col">
+          <!-- Level -->
+          <article class="glass-card level-card" aria-labelledby="level-title">
+            <p id="level-title" class="card-label">Niveau</p>
+            <div class="level-row">
+              <p class="level-value">Level 7</p>
+              <p class="level-xp">640 / 800 XP</p>
+            </div>
+            <div class="progress level-progress" role="progressbar" aria-label="XP vers le niveau 8" aria-valuemin="0" aria-valuemax="800" aria-valuenow="640">
+              <span class="progress-fill"></span>
+            </div>
+            <p class="card-help">Encore 160 XP pour passer au niveau 8</p>
+          </article>
+
+          <!-- Streak -->
+          <article class="glass-card streak-card" aria-labelledby="streak-title">
+            <div class="streak-ring" aria-hidden="true">
+              <span class="streak-flame">
+                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M12 2c.6 3.6 4.9 5.3 4.9 10.1A4.9 4.9 0 0 1 7.1 12c0-1.9.9-3.3 1.9-4.3 0 2 1 3.1 2.5 3.1-.1-3-1.1-5.3.5-8.8Z" />
+                </svg>
+              </span>
+              30
+            </div>
+            <div>
+              <p class="card-label">Série en cours</p>
+              <p id="streak-title" class="streak-title">30 jours d'affilée</p>
+              <p class="streak-sub">1 sept. – 30 sept.</p>
+            </div>
+          </article>
+        </div>
+
+        <!-- Activity -->
+        <article class="glass-card activity-card" aria-labelledby="activity-title">
+          <div class="card-head">
+            <h2 id="activity-title" class="card-title">Activité</h2>
+            <!-- Filled by js/profile.js from the activity data (contributions · jours actifs · période) -->
+            <p id="activity-meta" class="card-meta"></p>
+          </div>
+
+          <!-- Heatmap: cells are generated by js/profile.js -->
+          <div class="hm-scroll">
+            <div class="hm">
+              <div id="heatmap-months" class="hm-months" aria-hidden="true"></div>
+              <div class="hm-days" aria-hidden="true">
+                <span>Lun</span><span></span><span>Mer</span><span></span><span>Ven</span><span></span><span>Dim</span>
+              </div>
+              <div id="heatmap-grid" class="hm-grid" role="img" aria-label="Contributions"></div>
+            </div>
+          </div>
+
+          <div class="hm-legend">
+            <div class="hm-legend-scale">
+              <span>Moins</span>
+              <span class="hm-cell hm-l0" aria-hidden="true"></span>
+              <span class="hm-cell hm-l1" aria-hidden="true"></span>
+              <span class="hm-cell hm-l2" aria-hidden="true"></span>
+              <span class="hm-cell hm-l3" aria-hidden="true"></span>
+              <span class="hm-cell hm-l4" aria-hidden="true"></span>
+              <span>Plus</span>
+            </div>
+            <div class="hm-legend-scale">
+              <span class="hm-cell hm-l0 hm-streak" aria-hidden="true"></span>
+              <span>Jours du streak</span>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <!-- Recent projects -->
+      <section class="glass-card projects" aria-labelledby="projects-title">
+        <div class="card-head">
+          <h2 id="projects-title" class="card-title">Projets récents</h2>
+          <div class="filter-group" role="group" aria-label="Filtrer les projets">
+            <button type="button" class="filter-pill glass" data-filter="all" aria-pressed="true">Tous <span class="filter-count">3</span></button>
+            <button type="button" class="filter-pill glass" data-filter="validated" aria-pressed="false">Validés <span class="filter-count">2</span></button>
+            <button type="button" class="filter-pill glass" data-filter="pending" aria-pressed="false" data-owner-only>En attente <span class="filter-count">1</span></button>
+          </div>
+        </div>
+
+        <!-- Cards are generated by js/profile.js from the PROJECTS array -->
+        <div id="projects-grid" class="projects-grid"></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Scripts: shared behaviour first, then this page -->
+  <script src="js/main.js"></script>
+  <script src="js/profile.js"></script>
+</body>
+</html>

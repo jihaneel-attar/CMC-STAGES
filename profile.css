@@ -1,0 +1,348 @@
+/* ============================================================
+   CMC stages — profile page styles (profile.html only)
+   Shared tokens, .glass, navbar, sector colours, glass cards, page
+   head, chips and filter pills: see style.css.
+============================================================ */
+
+:root {
+  --left-col: 350px;                 /* width of the level/streak column */
+
+  /* Heatmap */
+  --hm-cell: 16px;
+  --hm-gap: 4px;
+  --hm-0: rgba(255, 255, 255, 0.08);
+  --hm-1: #2a4fae;
+  --hm-2: #4474e6;
+  --hm-3: #86a9ff;
+  --hm-4: #d5e1ff;
+
+  /* Status colours (always paired with a text label) */
+  --streak: #ff9a3c;
+  --mint: #7be0b8;
+  --amber: #ffb84d;
+  --track-empty: rgba(255, 255, 255, 0.14);
+}
+
+/* ---------- Background overlay: navy, lighter at the top ---------- */
+.profile-overlay {
+  background: linear-gradient(180deg,
+    rgba(7, 21, 43, 0.35) 0%,
+    rgba(7, 21, 43, 0.78) 50%,
+    rgba(7, 21, 43, 0.97) 100%);
+}
+
+/* ---------- Two-column row ---------- */
+.profile-grid {
+  display: grid;
+  grid-template-columns: var(--left-col) minmax(0, 1fr);
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.profile-col {
+  display: grid;
+  align-content: start;
+  gap: 1.5rem;
+}
+
+/* Level */
+.level-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+
+.level-value {
+  font-family: "Plus Jakarta Sans", Inter, ui-sans-serif, sans-serif;
+  font-size: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.level-xp {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.progress {
+  height: 10px;
+  margin-top: 1rem;
+  border-radius: 9999px;
+  background-color: rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+}
+
+.progress-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--hm-2), var(--hm-3));
+}
+
+.level-progress .progress-fill {
+  width: 80%; /* 640 / 800 XP */
+}
+
+/* Streak */
+.streak-card {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.streak-ring {
+  position: relative;
+  display: flex;
+  flex: 0 0 auto;
+  width: 92px;
+  height: 92px;
+  align-items: center;
+  justify-content: center;
+  border: 4px solid var(--streak);
+  border-radius: 9999px;
+  box-shadow: 0 0 28px -8px rgba(255, 154, 60, 0.7);
+  font-family: "Plus Jakarta Sans", Inter, ui-sans-serif, sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.streak-flame {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  display: flex;
+  width: 28px;
+  height: 28px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background-color: var(--streak);
+  color: #1a0e05;
+  transform: translateX(-50%);
+}
+
+.streak-title {
+  margin-top: 0.25rem;
+  font-family: "Plus Jakarta Sans", Inter, ui-sans-serif, sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.streak-sub {
+  margin-top: 0.125rem;
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* ---------- Activity heatmap ---------- */
+.hm-scroll {
+  margin-top: 1.25rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+  scrollbar-width: thin;
+}
+
+.hm {
+  display: grid;
+  grid-template-columns: auto max-content;
+  grid-template-rows: auto auto;
+  column-gap: 6px;
+  row-gap: 6px;
+  width: max-content;
+}
+
+.hm-months {
+  grid-column: 2;
+  grid-row: 1;
+  display: grid;                 /* columns are set by js/profile.js */
+  column-gap: var(--hm-gap);
+  height: 14px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.hm-months span {
+  grid-row: 1;
+  white-space: nowrap;
+}
+
+.hm-days {
+  grid-column: 1;
+  grid-row: 2;
+  display: grid;
+  grid-template-rows: repeat(7, var(--hm-cell));
+  row-gap: var(--hm-gap);
+  align-items: center;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.hm-grid {
+  grid-column: 2;
+  grid-row: 2;
+  display: grid;
+  grid-auto-flow: column;        /* fills Mon→Sun down each week column */
+  grid-template-rows: repeat(7, var(--hm-cell));
+  grid-auto-columns: var(--hm-cell);
+  gap: var(--hm-gap);
+}
+
+.hm-cell {
+  display: block;
+  width: var(--hm-cell);
+  height: var(--hm-cell);
+  border-radius: 4px;
+  background-color: var(--hm-0);
+}
+
+.hm-cell.hm-l1 { background-color: var(--hm-1); }
+.hm-cell.hm-l2 { background-color: var(--hm-2); }
+.hm-cell.hm-l3 { background-color: var(--hm-3); }
+.hm-cell.hm-l4 { background-color: var(--hm-4); }
+
+.hm-cell.hm-streak {
+  box-shadow: inset 0 0 0 1.5px var(--streak);
+}
+
+.hm-cell.hm-pad {
+  visibility: hidden; /* fills the first column when the period doesn't start on a Monday */
+}
+
+.hm-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  margin-top: 1rem;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.hm-legend-scale {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.hm-legend .hm-cell {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+/* ---------- Recent projects ---------- */
+.projects {
+  margin-top: 1.5rem;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.project-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  padding: 1.125rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  background-color: var(--inner-bg);
+}
+
+.project-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.project-tag {
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.project-time {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.55);
+  white-space: nowrap;
+}
+
+.project-title {
+  font-family: "Plus Jakarta Sans", Inter, ui-sans-serif, sans-serif;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+/* 3-step validation track */
+.track {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  margin-top: auto;
+}
+
+.track-seg {
+  height: 6px;
+  border-radius: 9999px;
+  background-color: var(--track-empty);
+}
+
+.track-seg.is-done    { background-color: var(--mint); }
+.track-seg.is-current { background-color: var(--amber); }
+
+.track-labels {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  margin-top: -0.375rem;
+  font-size: 0.6875rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.track-labels span:nth-child(2) { text-align: center; }
+.track-labels span:nth-child(3) { text-align: right; }
+
+.project-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.status-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  flex: 0 0 auto;
+  border-radius: 9999px;
+  background-color: var(--track-empty);
+}
+
+.status-dot.is-validated { background-color: var(--mint); }
+.status-dot.is-pending   { background-color: var(--amber); }
+
+/* ---------- Responsive ---------- */
+
+/* Two-column row stacks; the heatmap keeps scrolling inside its card */
+@media (max-width: 1099px) {
+  .profile-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Project cards in one column */
+@media (max-width: 799px) {
+  .projects-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CMC stages — Internships for CMC trainees</title>
+  <meta name="description" content="CMC stages connects CMC trainees with companies offering internships across Morocco." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS (CDN) + theme config (must stay in this order) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/tailwind.config.js"></script>
+
+  <!-- Custom styles -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="relative min-h-screen overflow-x-hidden bg-slate-950 font-sans text-white antialiased">
+
+  <!-- ============================================================
+       BACKGROUND: blurred image + dark transparent overlay
+  ============================================================ -->
+  <div class="fixed inset-0 -z-20 overflow-hidden" aria-hidden="true">
+    <div class="page-bg absolute inset-0"></div>
+  </div>
+  <div class="fixed inset-0 -z-10 bg-slate-950/40" aria-hidden="true"></div>
+
+  <div class="flex min-h-screen flex-col">
+
+    <!-- ============================================================
+         NAVBAR
+    ============================================================ -->
+    <header class="site-header sticky top-0 z-20">
+      <nav class="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 sm:px-8" aria-label="Main navigation">
+
+        <!-- Logo -->
+        <a href="#" class="site-logo rounded-md font-display text-2xl font-extrabold tracking-tight text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70">
+          CMC <span class="font-semibold text-white/80">stages</span>
+        </a>
+
+        <!-- Center links (desktop) -->
+        <ul class="absolute left-1/2 hidden -translate-x-1/2 items-center gap-9 lg:flex">
+          <li><a href="#" class="nav-link text-sm font-medium text-white/80 transition hover:text-white focus:outline-none focus-visible:text-white focus-visible:underline">Find internship</a></li>
+          <li><a href="entreprise.html" class="nav-link text-sm font-medium text-white/80 transition hover:text-white focus:outline-none focus-visible:text-white focus-visible:underline">For companies</a></li>
+          <li><a href="about.html" class="nav-link text-sm font-medium text-white/80 transition hover:text-white focus:outline-none focus-visible:text-white focus-visible:underline">About CMC</a></li>
+        </ul>
+
+        <!-- Auth buttons (desktop, guest). data-modal opens the matching <dialog> -->
+        <div class="hidden items-center gap-3 lg:flex" data-auth="guest">
+          <a href="profile.html" data-modal="login" class="glass rounded-full px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70">Login</a>
+          <a href="#" data-modal="signup" class="site-cta rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-slate-900 shadow-lg shadow-black/20 transition hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900">Sign up</a>
+        </div>
+
+        <!-- Signed-in state (desktop). Shown by js/main.js once a user is stored -->
+        <div class="hidden items-center gap-3 lg:flex" data-auth="user">
+          <a href="profile.html" class="user-pill glass">
+            <span class="user-avatar" data-user="initial" aria-hidden="true"></span>
+            <span class="user-meta">
+              <span data-user="name"></span>
+              <span data-user="role"></span>
+            </span>
+          </a>
+          <button type="button" data-action="logout" class="glass rounded-full px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70">Log out</button>
+        </div>
+
+        <!-- Menu button (mobile / tablet) -->
+        <button id="menu-toggle" type="button" class="glass inline-flex h-11 w-11 items-center justify-center rounded-full text-white transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70 lg:hidden" aria-controls="mobile-menu" aria-expanded="false" aria-label="Open menu">
+          <svg id="icon-open" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+          <svg id="icon-close" class="hidden h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>
+        </button>
+      </nav>
+
+      <!-- Mobile menu panel -->
+      <div id="mobile-menu" class="absolute inset-x-0 top-full hidden px-5 sm:px-8 lg:hidden">
+        <div class="rounded-3xl border border-white/15 bg-slate-900/90 p-4 shadow-2xl shadow-black/40 backdrop-blur-xl">
+          <a href="#" class="block rounded-2xl px-4 py-3 text-base font-medium text-white/90 hover:bg-white/10">Find internship</a>
+          <a href="entreprise.html" class="block rounded-2xl px-4 py-3 text-base font-medium text-white/90 hover:bg-white/10">For companies</a>
+          <a href="about.html" class="block rounded-2xl px-4 py-3 text-base font-medium text-white/90 hover:bg-white/10">About CMC</a>
+          <div class="mt-3 grid grid-cols-2 gap-3 border-t border-white/10 pt-4" data-auth="guest">
+            <a href="profile.html" data-modal="login" class="glass rounded-full px-4 py-2.5 text-center text-sm font-semibold text-white hover:bg-white/20">Login</a>
+            <a href="#" data-modal="signup" class="rounded-full bg-white px-4 py-2.5 text-center text-sm font-semibold text-slate-900 hover:bg-slate-100">Sign up</a>
+          </div>
+          <div class="mt-3 flex items-center justify-between gap-3 border-t border-white/10 pt-4" data-auth="user">
+            <a href="profile.html" class="user-pill glass">
+              <span class="user-avatar" data-user="initial" aria-hidden="true"></span>
+              <span class="user-meta">
+                <span data-user="name"></span>
+                <span data-user="role"></span>
+              </span>
+            </a>
+            <button type="button" data-action="logout" class="glass rounded-full px-4 py-2.5 text-sm font-semibold text-white hover:bg-white/20">Log out</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ============================================================
+         HERO
+    ============================================================ -->
+    <main class="flex flex-1 flex-col">
+      <section class="mx-auto flex w-full max-w-4xl flex-1 flex-col items-center justify-center px-5 py-14 text-center sm:px-8 sm:py-20">
+
+        <!-- Pill badge -->
+        <span class="hero-reveal hero-reveal-1 glass inline-flex items-center gap-2.5 rounded-full px-4 py-2 text-sm font-medium text-white/90">
+          <span class="h-2 w-2 rounded-full bg-teal-300 shadow-[0_0_10px_2px_rgba(94,234,212,0.6)]"></span>
+          <span data-user="welcome">Built for CMC trainees</span>
+        </span>
+
+        <!-- Headline -->
+        <h1 class="hero-reveal hero-reveal-2 mt-7 font-display text-4xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-6xl lg:text-7xl">
+          Your training deserves the right internship
+        </h1>
+
+        <!-- Sub-text -->
+        <p class="hero-reveal hero-reveal-3 mt-5 text-lg text-white/75 sm:text-xl">
+          +160 companies ready to hire.
+        </p>
+
+        <!-- Search bar -->
+        <form id="search-form" class="hero-reveal hero-reveal-4 mt-10 w-full max-w-2xl" role="search" aria-label="Search internships">
+          <div class="flex items-center gap-3 rounded-full bg-white py-2 pl-5 pr-2 shadow-2xl shadow-black/30 transition focus-within:ring-4 focus-within:ring-white/30 sm:pl-7">
+            <svg class="h-5 w-5 shrink-0 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" />
+            </svg>
+            <label for="search-input" class="sr-only">Search internships</label>
+            <input id="search-input" name="q" type="search" autocomplete="off" placeholder="Internship for Digital &amp; IA" class="h-12 w-full min-w-0 bg-transparent text-base text-slate-900 placeholder-slate-400 focus:outline-none sm:h-14 sm:text-lg" />
+            <button type="submit" class="search-submit flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-slate-900 text-white transition hover:bg-teal-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 sm:h-14 sm:w-14" aria-label="Search">
+              <svg class="search-arrow h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M5 12h14M13 6l6 6-6 6" />
+              </svg>
+            </button>
+          </div>
+        </form>
+
+        <!-- Category chips: horizontal scroller (poles). js/main.js drives
+             the chevrons and the edge fades; the row scrolls natively on touch. -->
+        <div class="chips hero-reveal hero-reveal-5 mt-6 w-full max-w-2xl">
+          <button type="button" class="chips-arrow chips-arrow-prev glass" aria-label="Scroll categories left">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6" /></svg>
+          </button>
+
+          <div class="chips-track" role="group" aria-label="CMC poles">
+            <!-- This list is the single source of truth: js/main.js reads data-category
+                 for the typing placeholder, and data-sector picks the dot colour (style.css). -->
+            <button type="button" data-category="Digital &amp; IA" data-sector="digital" class="chip glass rounded-full px-5 py-2.5 text-sm font-medium text-white/90 transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70" aria-pressed="false">Digital &amp; IA</button>
+            <button type="button" data-category="Santé" data-sector="sante" class="chip glass rounded-full px-5 py-2.5 text-sm font-medium text-white/90 transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70" aria-pressed="false">Santé</button>
+            <button type="button" data-category="Industrie" data-sector="industrie" class="chip glass rounded-full px-5 py-2.5 text-sm font-medium text-white/90 transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70" aria-pressed="false">Industrie</button>
+            <button type="button" data-category="Agriculture" data-sector="agriculture" class="chip glass rounded-full px-5 py-2.5 text-sm font-medium text-white/90 transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70" aria-pressed="false">Agriculture</button>
+            <button type="button" data-category="Agro-industrie" data-sector="agro" class="chip glass rounded-full px-5 py-2.5 text-sm font-medium text-white/90 transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70" aria-pressed="false">Agro-industrie</button>
+            <button type="button" data-category="Pêche" data-sector="peche" class="chip glass rounded-full px-5 py-2.5 text-sm font-medium text-white/90 transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70" aria-pressed="false">Pêche</button>
+            <button type="button" data-category="Arts &amp; Industries Graphiques" data-sector="arts" class="chip glass rounded-full px-5 py-2.5 text-sm font-medium text-white/90 transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70" aria-pressed="false">Arts &amp; Industries Graphiques</button>
+            <button type="button" data-category="Gestion &amp; Commerce" data-sector="gestion" class="chip glass rounded-full px-5 py-2.5 text-sm font-medium text-white/90 transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70" aria-pressed="false">Gestion &amp; Commerce</button>
+            <button type="button" data-category="Tourisme, Hôtellerie &amp; Restauration" data-sector="tourisme" class="chip glass rounded-full px-5 py-2.5 text-sm font-medium text-white/90 transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70" aria-pressed="false">Tourisme, Hôtellerie &amp; Restauration</button>
+          </div>
+
+          <button type="button" class="chips-arrow chips-arrow-next glass" aria-label="Scroll categories right">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6" /></svg>
+          </button>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           TRUSTED COMPANIES
+           To use a logo, replace the <span> inside a card with:
+           <img src="images/logos/your-file.svg" alt="Company name" class="max-h-8 w-auto" />
+      ============================================================ -->
+      <section class="mx-auto w-full max-w-7xl px-5 pb-10 sm:px-8 sm:pb-14" aria-labelledby="trusted-title">
+        <p id="trusted-title" class="text-center text-sm font-medium uppercase tracking-[0.18em] text-white/60">
+          Trusted by leading Moroccan companies
+        </p>
+
+<div class="marquee mt-6">
+<ul class="marquee-track">
+  <li class="company-card"><img class="company-logo" src="Images/logo/images.png" alt="Orange" /></li>
+  <li class="company-card"><img class="company-logo" src="Images/logo/wisara.png" alt="Ministère de la Santé" /></li>
+  <li class="company-card"><img class="company-logo" src="Images/logo/marjane-logo.png" alt="Marjane" /></li>
+  <li class="company-card"><img class="company-logo" src="Images/logo/Rni-maroc.png" alt="RNI" /></li>
+  <li class="company-card"><img class="company-logo" src="Images/logo/OCP_Group.svg.webp" alt="OCP Group" /></li>
+  <li class="company-card"><img class="company-logo" src="Images/logo/images.jpg" alt="Attijari wafa bank" /></li>
+</ul>
+</div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ============================================================
+       MODALS — Login / Sign up. Native <dialog>, opened by js/main.js
+       from any element with data-modal="login|signup".
+  ============================================================ -->
+  <dialog id="modal-login" class="modal" aria-labelledby="login-title">
+    <div class="modal-panel">
+      <button type="button" class="modal-close glass" data-close aria-label="Close">
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>
+      </button>
+
+      <h2 id="login-title" class="font-display text-2xl font-bold tracking-tight">Welcome back</h2>
+      <p class="mt-1 text-sm text-white/60">Log in to your CMC stages account.</p>
+
+      <form class="mt-6 space-y-4" data-form="login">
+        <label class="field">
+          <span class="field-label">Email</span>
+          <input type="email" name="email" required autocomplete="email" placeholder="prenom.nom@cmc.ac.ma" />
+        </label>
+        <label class="field">
+          <span class="field-label">Password</span>
+          <input type="password" name="password" required minlength="6" autocomplete="current-password" placeholder="••••••••" />
+        </label>
+        <button type="submit" class="btn-primary">Log in</button>
+      </form>
+
+      <div class="modal-divider"><span>Quick demo</span></div>
+
+      <div class="grid gap-3">
+        <button type="button" class="demo-btn glass" data-demo="stagiaire">
+          <span class="demo-icon" aria-hidden="true">🚀</span>
+          <span class="demo-text">
+            <strong>Demo Stagiaire</strong>
+            <small>Sara Benani · Level 7 · opens the profile dashboard</small>
+          </span>
+        </button>
+        <button type="button" class="demo-btn glass" data-demo="entreprise">
+          <span class="demo-icon" aria-hidden="true">🏢</span>
+          <span class="demo-text">
+            <strong>Demo Entreprise</strong>
+            <small>Recruteur · test the search and filters</small>
+          </span>
+        </button>
+      </div>
+
+      <p class="mt-6 text-center text-sm text-white/60">
+        No account yet? <button type="button" class="modal-link" data-modal="signup">Sign up</button>
+      </p>
+
+      <!-- Shown while "entering the dashboard" -->
+      <div class="modal-status" aria-live="polite">
+        <span class="spinner" aria-hidden="true"></span>
+        <p class="modal-status-text"></p>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="modal-signup" class="modal" aria-labelledby="signup-title">
+    <div class="modal-panel">
+      <button type="button" class="modal-close glass" data-close aria-label="Close">
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>
+      </button>
+
+      <h2 id="signup-title" class="font-display text-2xl font-bold tracking-tight">Create your account</h2>
+      <p class="mt-1 text-sm text-white/60">Join +160 companies and CMC trainees.</p>
+
+      <form class="mt-6 space-y-4" data-form="signup">
+        <label class="field">
+          <span class="field-label">Full name</span>
+          <input type="text" name="fullname" required minlength="2" autocomplete="name" placeholder="Sara Benani" />
+        </label>
+
+        <fieldset class="field">
+          <legend class="field-label">I am a</legend>
+          <div class="role-group">
+            <label class="role-option">
+              <input type="radio" name="role" value="stagiaire" class="sr-only" checked />
+              <span>🎓 Stagiaire</span>
+            </label>
+            <label class="role-option">
+              <input type="radio" name="role" value="entreprise" class="sr-only" />
+              <span>🏢 Entreprise</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <label class="field">
+          <span class="field-label">Email</span>
+          <input type="email" name="email" required autocomplete="email" placeholder="prenom.nom@cmc.ac.ma" />
+          <span class="field-hint">Trainees use their CMC address (…@cmc.ac.ma).</span>
+        </label>
+
+        <label class="field">
+          <span class="field-label">Password</span>
+          <input type="password" name="password" required minlength="8" autocomplete="new-password" placeholder="At least 8 characters" />
+        </label>
+
+        <button type="submit" class="btn-primary">Create account</button>
+      </form>
+
+      <p class="mt-6 text-center text-sm text-white/60">
+        Already have an account? <button type="button" class="modal-link" data-modal="login">Log in</button>
+      </p>
+
+      <div class="modal-status" aria-live="polite">
+        <span class="spinner" aria-hidden="true"></span>
+        <p class="modal-status-text"></p>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Scripts -->
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,1056 @@
+/* ============================================================
+   CMC stages — custom styles
+   Only what Tailwind utilities do not cover.
+============================================================ */
+
+/* ---------- Background photo ---------- */
+:root {
+  --hero-image: url('Images/cmcc.jpeg');
+
+  /* CMC sector (pôle) colours — reusable on other pages */
+  --sector-digital: #E8702A;      /* Digital & IA */
+  --sector-sante: #D9363E;        /* Santé */
+  --sector-industrie: #3F5564;    /* Industrie */
+  --sector-agriculture: #2E9E4F;  /* Agriculture */
+  --sector-agro: #1F5A3A;         /* Agro-industrie */
+  --sector-peche: #2D9CDB;        /* Pêche */
+  --sector-arts: #8E5BC9;         /* Arts & Industries Graphiques */
+  --sector-gestion: #3D3A9E;      /* Gestion & Commerce */
+  --sector-tourisme: #1FA89A;     /* Tourisme, Hôtellerie & Restauration */
+}
+
+.page-bg {
+  background-image:
+    var(--hero-image),
+    linear-gradient(135deg, #0b1f3a 0%, #0c2140 50%, #07152b 100%);
+  background-size: cover;
+  background-position: center;
+  filter: blur(3px);
+  transform: scale(1.02); /* hides the soft edge created by the blur */
+}
+
+/* ---------- Frosted glass (navbar buttons, badge, chips) ---------- */
+.glass {
+  background-color: rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+/* ---------- Trusted companies cards ---------- */
+.company-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 5rem;
+  padding: 0.875rem 1.25rem;
+  background-color: transparent;
+  transition: transform 150ms ease;
+}
+
+.company-card:hover {
+  transform: translateY(-2px);
+}
+
+/* Same box for every logo */
+.company-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* ---------- Logo marquee ----------
+   Without JS (or with reduced motion) the logos sit in a centered,
+   wrapping row. js/main.js clones the logos, measures one set and adds
+   .is-animated, which switches to a single scrolling row. */
+.marquee-track {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.marquee-track .company-card {
+  flex: 0 0 auto;
+  width: 9rem;
+}
+
+@media (min-width: 640px) {
+  .marquee-track .company-card {
+    width: 11rem;
+  }
+}
+
+.marquee.is-animated {
+  overflow: hidden;
+  /* soft fade on the left and right edges */
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+}
+
+.marquee.is-animated .marquee-track {
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  width: max-content;
+  animation: marquee-scroll var(--marquee-duration, 30s) linear infinite;
+  will-change: transform;
+}
+
+.marquee.is-animated:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* --marquee-shift = one set of logos + one gap, so the loop is seamless */
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-1 * var(--marquee-shift, 50%)));
+  }
+}
+
+/* ---------- Mouse spotlight ----------
+   Created by js/main.js on desktop pointers only. z-index -5 puts it
+   above the dark overlay (-z-10) and below the page content. */
+.spotlight {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -5;
+  width: 40rem;
+  height: 40rem;
+  margin: -20rem 0 0 -20rem; /* centre the circle on the pointer */
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(45, 212, 191, 0.18) 0%, rgba(45, 212, 191, 0.07) 40%, transparent 70%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 400ms ease, transform 150ms ease-out;
+  will-change: transform;
+}
+
+.spotlight.is-visible {
+  opacity: 1;
+}
+
+/* ---------- Hero entrance (staggered fade-up on load) ----------
+   Each element gets a .hero-reveal-N class that sets its place in the
+   sequence; the delay is derived from it. The chips row animates as one
+   block (its scroll container would clip chips moving individually).
+   Fill mode is "backwards" (not "both") so the animation lets go of
+   transform once done and the hover lift still works. */
+@keyframes hero-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.hero-reveal {
+  animation: hero-fade-up 700ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: calc(100ms + var(--reveal-order, 0) * 120ms);
+}
+
+.hero-reveal-1 { --reveal-order: 0; }   /* badge */
+.hero-reveal-2 { --reveal-order: 1; }   /* headline */
+.hero-reveal-3 { --reveal-order: 2; }   /* sub-text */
+.hero-reveal-4 { --reveal-order: 3; }   /* search bar */
+.hero-reveal-5 { --reveal-order: 4; }   /* chips row */
+
+/* ---------- Category chips scroller ----------
+   .chips-track scrolls horizontally with the scrollbar hidden. The edge
+   fades are a mask whose widths come from --fade-left / --fade-right;
+   js/main.js toggles .can-scroll-left / .can-scroll-right on .chips to
+   show each fade and chevron only when there is more content that way. */
+.chips {
+  position: relative;
+  --fade-left: 0px;
+  --fade-right: 0px;
+}
+
+.chips.can-scroll-left  { --fade-left: 3.5rem; }
+.chips.can-scroll-right { --fade-right: 3.5rem; }
+
+.chips-track {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 4px 2px; /* room for the hover lift and focus rings */
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none; /* Firefox */
+  -webkit-mask-image: linear-gradient(to right,
+    transparent, #000 var(--fade-left),
+    #000 calc(100% - var(--fade-right)), transparent);
+  mask-image: linear-gradient(to right,
+    transparent, #000 var(--fade-left),
+    #000 calc(100% - var(--fade-right)), transparent);
+}
+
+.chips-track::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+
+/* Keep the row centred while it fits; left-aligned once it overflows */
+@supports (justify-content: safe center) {
+  .chips-track { justify-content: safe center; }
+}
+
+.chips-track .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 0 0 auto;
+  white-space: nowrap;
+  scroll-snap-align: start;
+}
+
+/* Sector dot before each label; colour comes from data-sector */
+.chips-track .chip::before {
+  content: '';
+  width: 0.5rem;
+  height: 0.5rem;
+  flex: 0 0 auto;
+  border-radius: 9999px;
+  background-color: var(--sector-color, currentColor);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.25); /* keeps dark dots visible on glass */
+}
+
+/* Any element with data-sector gets --sector-color (chips, avatar rings…) */
+[data-sector="digital"]     { --sector-color: var(--sector-digital); }
+[data-sector="sante"]       { --sector-color: var(--sector-sante); }
+[data-sector="industrie"]   { --sector-color: var(--sector-industrie); }
+[data-sector="agriculture"] { --sector-color: var(--sector-agriculture); }
+[data-sector="agro"]        { --sector-color: var(--sector-agro); }
+[data-sector="peche"]       { --sector-color: var(--sector-peche); }
+[data-sector="arts"]        { --sector-color: var(--sector-arts); }
+[data-sector="gestion"]     { --sector-color: var(--sector-gestion); }
+[data-sector="tourisme"]    { --sector-color: var(--sector-tourisme); }
+
+@media (min-width: 640px) {
+  .chips-track { gap: 0.75rem; }
+}
+
+/* Chevron buttons: same glass as the chips, pinned to each edge */
+.chips-arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  color: #fff;
+  transform: translateY(-50%);
+  transition: background-color 150ms ease, opacity 200ms ease, visibility 200ms ease;
+  /* hidden until js/main.js says there is content that way */
+  opacity: 0;
+  visibility: hidden;
+}
+
+.chips-arrow-prev { left: 0; }
+.chips-arrow-next { right: 0; }
+
+.chips-arrow:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.chips-arrow:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.7);
+  outline-offset: 2px;
+}
+
+.chips.can-scroll-left .chips-arrow-prev,
+.chips.can-scroll-right .chips-arrow-next {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ---------- Sticky header ----------
+   Transparent, full-width, light text over the hero. js/main.js adds
+   .is-scrolled after 50px of scrolling: the <header> keeps the sticky
+   slot and gains small top/side margins, while the inner <nav> becomes
+   a narrower, centred, rounded white pill with a soft shadow. Everything
+   animates over 300ms. */
+.site-header {
+  padding: 0;
+  transition: padding 300ms ease;
+}
+
+.site-header nav {
+  background-color: transparent;
+  border-radius: 9999px;
+  box-shadow: 0 10px 30px -12px rgba(15, 23, 42, 0);
+  transition:
+    max-width 300ms ease,
+    background-color 300ms ease,
+    box-shadow 300ms ease,
+    padding 300ms ease;
+}
+
+.site-header.is-scrolled {
+  padding: 0.75rem 1rem; /* floats off the top and sides */
+}
+
+.site-header.is-scrolled nav {
+  max-width: 72rem; /* narrower than the 80rem top state */
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  background-color: #fff;
+  box-shadow: 0 1px 0 rgba(15, 23, 42, 0.06), 0 12px 32px -12px rgba(15, 23, 42, 0.22);
+}
+
+@media (min-width: 640px) {
+  .site-header.is-scrolled {
+    padding: 0.75rem 1.5rem;
+  }
+
+  .site-header.is-scrolled nav {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* Header contents fade between light and dark at the same speed */
+.site-header .site-logo,
+.site-header .site-logo span,
+.site-header .nav-link,
+.site-header .glass,
+.site-header .site-cta {
+  transition: color 300ms ease, background-color 300ms ease, border-color 300ms ease, box-shadow 300ms ease;
+}
+
+.site-header.is-scrolled .site-logo { color: #0f172a; }         /* slate-900 */
+.site-header.is-scrolled .site-logo span { color: #475569; }    /* slate-600 */
+
+.site-header.is-scrolled .nav-link { color: #334155; }          /* slate-700 */
+.site-header.is-scrolled .nav-link:hover,
+.site-header.is-scrolled .nav-link[aria-current="page"] { color: #0f172a; }
+.site-header.is-scrolled .nav-link::after { background-color: #14b8a6; } /* teal-500 reads on white */
+
+/* Login / Log out buttons, user pill and menu toggle (all .glass).
+   Scoped to nav: the mobile menu panel below stays dark. */
+.site-header.is-scrolled nav .glass {
+  color: #0f172a;
+  background-color: rgba(15, 23, 42, 0.05);
+  border-color: rgba(15, 23, 42, 0.12);
+}
+
+.site-header.is-scrolled nav .glass:hover {
+  background-color: rgba(15, 23, 42, 0.1);
+}
+
+.site-header.is-scrolled nav .user-meta [data-user="role"] {
+  color: #64748b; /* slate-500 */
+}
+
+/* Sign up button: white-on-dark becomes dark-on-white */
+.site-header.is-scrolled .site-cta {
+  color: #fff;
+  background-color: #0f172a;
+  box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.2);
+}
+
+.site-header.is-scrolled .site-cta:hover {
+  background-color: #1e293b; /* slate-800 */
+}
+
+/* ---------- Hover states ---------- */
+
+/* Navbar links: teal underline grows from the left */
+.nav-link {
+  position: relative;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 2px;
+  border-radius: 1px;
+  background-color: #5eead4; /* teal-300, same as the badge dot */
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 250ms ease;
+}
+
+.nav-link:hover::after {
+  transform: scaleX(1);
+}
+
+/* Current page (aria-current set by js/main.js): white text, underline shown */
+.nav-link[aria-current="page"] {
+  color: #fff;
+}
+
+.nav-link[aria-current="page"]::after {
+  transform: scaleX(1);
+}
+
+/* Category chips: small lift (Tailwind's .transition already eases it) */
+.chip:hover {
+  transform: translateY(-2px);
+}
+
+/* Search button: arrow slides slightly to the right */
+.search-arrow {
+  transition: transform 200ms ease;
+}
+
+.search-submit:hover .search-arrow,
+.search-submit:focus-visible .search-arrow {
+  transform: translateX(3px);
+}
+
+/* ---------- Signed-in state ----------
+   js/main.js toggles .is-signed-in on <body>; the two [data-auth] groups
+   in the header swap. !important beats Tailwind's lg:flex on the groups. */
+body:not(.is-signed-in) [data-auth="user"],
+body.is-signed-in [data-auth="guest"] {
+  display: none !important;
+}
+
+.user-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.3125rem 1rem 0.3125rem 0.3125rem;
+  border-radius: 9999px;
+  color: #fff;
+  text-decoration: none; /* it is a link to profile.html */
+  transition: background-color 150ms ease;
+}
+
+.user-pill:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.user-pill:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.7);
+  outline-offset: 2px;
+}
+
+.user-avatar {
+  display: flex;
+  width: 2rem;
+  height: 2rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background-color: #5eead4; /* teal-300 */
+  color: #0f172a;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.user-meta {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+  text-align: left;
+}
+
+.user-meta [data-user="name"] {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.user-meta [data-user="role"] {
+  font-size: 0.6875rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* ---------- Login / Sign up modals ----------
+   Native <dialog>. The dialog box itself fills the viewport (so a click
+   on it = a click outside the panel) and the .modal-panel is the glass
+   card. .is-closing runs the entrance animation in reverse before
+   js/main.js calls close(). */
+dialog.modal {
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  max-height: 100%;
+  margin: 0;
+  padding: 1rem;
+  border: 0;
+  background: transparent;
+  color: #fff;
+}
+
+dialog.modal[open] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+dialog.modal::backdrop {
+  background: rgba(2, 6, 23, 0.6);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+body:has(dialog.modal[open]) {
+  overflow: hidden; /* no page scroll behind the modal */
+}
+
+.modal-panel {
+  position: relative;
+  width: 100%;
+  max-width: 26rem;
+  max-height: 100%;
+  overflow-y: auto;
+  padding: 1.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 1.5rem;
+  background: rgba(15, 23, 42, 0.78);
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+  box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.7);
+}
+
+@media (min-width: 640px) {
+  .modal-panel { padding: 2rem; }
+}
+
+@keyframes modal-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes modal-pop {
+  from { opacity: 0; transform: translateY(16px) scale(0.97); }
+  to   { opacity: 1; transform: none; }
+}
+
+dialog.modal[open]::backdrop     { animation: modal-fade 200ms ease both; }
+dialog.modal[open] .modal-panel  { animation: modal-pop 240ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+dialog.modal.is-closing::backdrop    { animation: modal-fade 200ms ease reverse both; }
+dialog.modal.is-closing .modal-panel { animation: modal-pop 200ms ease reverse both; }
+
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  width: 2.25rem;
+  height: 2.25rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  color: #fff;
+  transition: background-color 150ms ease;
+}
+
+.modal-close:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.modal-close:focus-visible,
+.btn-primary:focus-visible,
+.demo-btn:focus-visible,
+.modal-link:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.7);
+  outline-offset: 2px;
+}
+
+/* Form fields */
+.field {
+  display: block;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  text-align: left;
+}
+
+.field-label {
+  display: block;
+  margin-bottom: 0.375rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.field input,
+.field select {
+  width: 100%;
+  height: 2.875rem;
+  padding: 0 0.875rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 0.875rem;
+  background-color: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  font-size: 0.9375rem;
+  transition: border-color 150ms ease, background-color 150ms ease, box-shadow 150ms ease;
+}
+
+.field input::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.field input:focus,
+.field select:focus {
+  outline: none;
+  border-color: rgba(94, 234, 212, 0.7);
+  background-color: rgba(255, 255, 255, 0.09);
+  box-shadow: 0 0 0 3px rgba(94, 234, 212, 0.2);
+}
+
+.field input:user-invalid {
+  border-color: rgba(248, 113, 113, 0.8); /* red-400, only after the user touched it */
+}
+
+.field-hint {
+  display: block;
+  margin-top: 0.375rem;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* Role selector: two radio cards */
+.role-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.role-option {
+  position: relative;
+  cursor: pointer;
+}
+
+.role-option span {
+  display: flex;
+  height: 2.875rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 0.875rem;
+  background-color: rgba(255, 255, 255, 0.06);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+
+.role-option:hover span {
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+.role-option input:checked + span {
+  background-color: #fff;
+  border-color: #fff;
+  color: #0f172a;
+}
+
+.role-option input:focus-visible + span {
+  outline: 2px solid rgba(255, 255, 255, 0.7);
+  outline-offset: 2px;
+}
+
+/* Buttons and links inside the modals */
+.btn-primary {
+  display: flex;
+  width: 100%;
+  height: 2.875rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background-color: #fff;
+  color: #0f172a;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  transition: background-color 150ms ease, transform 150ms ease;
+}
+
+.btn-primary:hover  { background-color: #f1f5f9; }
+.btn-primary:active { transform: scale(0.98); }
+
+.modal-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1.5rem 0 1rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.modal-divider::before,
+.modal-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+.demo-btn {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.75rem 1rem;
+  border-radius: 1rem;
+  color: #fff;
+  text-align: left;
+  transition: background-color 150ms ease, transform 150ms ease;
+}
+
+.demo-btn:hover {
+  background-color: rgba(255, 255, 255, 0.18);
+  transform: translateY(-1px);
+}
+
+.demo-icon {
+  font-size: 1.375rem;
+  line-height: 1;
+}
+
+.demo-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.demo-text strong { font-size: 0.9375rem; font-weight: 600; }
+.demo-text small  { font-size: 0.75rem; color: rgba(255, 255, 255, 0.6); }
+
+.modal-link {
+  color: #fff;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 255, 255, 0.4);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 150ms ease;
+}
+
+.modal-link:hover {
+  text-decoration-color: #fff;
+}
+
+/* "Loading your dashboard…" overlay inside the panel */
+.modal-status {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 2rem;
+  border-radius: inherit;
+  background-color: rgba(15, 23, 42, 0.94);
+  text-align: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 200ms ease, visibility 200ms ease;
+}
+
+.modal.is-loading .modal-status {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-status-text {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.spinner {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 3px solid rgba(255, 255, 255, 0.15);
+  border-top-color: #5eead4;
+  border-radius: 50%;
+  animation: spin 800ms linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ---------- Shared page components (profile.html, entreprise.html) ----------
+   Glass cards, page head with a large avatar, chips, filter pills and
+   select fields. Page-specific styles live in profile.css / entreprise.css. */
+:root {
+  --card-bg: rgba(255, 255, 255, 0.08);
+  --card-border: rgba(255, 255, 255, 0.16);
+  --inner-bg: rgba(255, 255, 255, 0.06);
+}
+
+/* The hidden attribute always wins over display utilities */
+[hidden] {
+  display: none !important;
+}
+
+.glass-card {
+  padding: 1.25rem;
+  border: 1px solid var(--card-border);
+  border-radius: 26px;
+  background-color: var(--card-bg);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+}
+
+@media (min-width: 640px) {
+  .glass-card { padding: 1.5rem; }
+}
+
+.card-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.card-title {
+  font-family: "Plus Jakarta Sans", Inter, ui-sans-serif, sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.card-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+}
+
+.card-meta {
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.card-help {
+  margin-top: 0.75rem;
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Page head: large avatar + title on the left, one action on the right */
+.profile-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.profile-identity {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  min-width: 0;
+}
+
+/* 104px avatar with a 3px ring in the sector colour */
+.avatar-xl {
+  display: flex;
+  flex: 0 0 auto;
+  width: 104px;
+  height: 104px;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid rgba(7, 21, 43, 0.9);      /* gap between fill and ring */
+  border-radius: 9999px;
+  background-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 0 3px var(--sector-color, #fff);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  font-family: "Plus Jakarta Sans", Inter, ui-sans-serif, sans-serif;
+  font-size: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.profile-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.pchip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.92);
+  white-space: nowrap;
+  transition: background-color 150ms ease, transform 150ms ease;
+}
+
+.pchip-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  flex: 0 0 auto;
+  border-radius: 9999px;
+  background-color: var(--sector-color, currentColor);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.25);
+}
+
+.pchip-add {
+  border-style: dashed;
+  border-color: rgba(255, 255, 255, 0.35);
+  background-color: transparent;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+button.pchip:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.pchip-divider {
+  width: 1px;
+  height: 1.25rem;
+  margin: 0 0.25rem;
+  background-color: rgba(255, 255, 255, 0.22);
+}
+
+.btn-white {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+/* Filter pills (aria-pressed marks the active one) */
+.filter-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.filter-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.4375rem 0.875rem;
+  border-radius: 9999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.filter-pill:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.filter-pill[aria-pressed="true"] {
+  background-color: #fff;
+  border-color: #fff;
+  color: #0b1f3a;
+}
+
+.filter-count {
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+.pchip:focus-visible,
+.filter-pill:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.75);
+  outline-offset: 2px;
+}
+
+/* Select fields share the input look (see .field input above) */
+.field select {
+  -webkit-appearance: none;
+  appearance: none;
+  padding-right: 2.5rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.7)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.875rem center;
+  background-size: 1rem;
+  cursor: pointer;
+}
+
+.field select option {
+  color: #0f172a;
+  background-color: #fff;
+}
+
+/* The head action moves under the chips; the avatar stacks on small phones */
+@media (max-width: 799px) {
+  .profile-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 479px) {
+  .profile-identity {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}
+
+/* ---------- Accessibility ----------
+   Reduced motion: no animations or movement. Hover states still change
+   color/underline, just instantly. The marquee and typing placeholder
+   are skipped in js/main.js, so the logos stay a static wrapped row. */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition-duration: 0.01ms !important;
+  }
+
+  .hero-reveal {
+    animation: none;
+  }
+
+  /* Static wrapped logo row, even if the marquee was already built */
+  .marquee.is-animated {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .marquee.is-animated .marquee-track {
+    flex-wrap: wrap;
+    justify-content: center;
+    width: auto;
+    animation: none;
+  }
+
+  .marquee-track [data-clone] {
+    display: none;
+  }
+
+  .chip:hover,
+  .company-card:hover,
+  .demo-btn:hover,
+  button.pchip:hover,
+  .search-submit:hover .search-arrow,
+  .search-submit:focus-visible .search-arrow {
+    transform: none;
+  }
+
+  /* Modals appear and disappear instantly; no spinner rotation */
+  dialog.modal[open]::backdrop,
+  dialog.modal[open] .modal-panel,
+  .spinner {
+    animation: none;
+  }
+}

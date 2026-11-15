@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>À propos du CMC — CMC stages</title>
+  <meta name="description" content="Les Cités des Métiers et des Compétences : une nouvelle génération de campus de formation professionnelle au Maroc." />
+
+  <!-- Fonts (same as index.html) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS (CDN) + theme config (must stay in this order) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/tailwind.config.js"></script>
+
+  <!-- Shared styles only: this page adds no CSS of its own -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="relative min-h-screen overflow-x-hidden bg-slate-950 font-sans text-white antialiased">
+
+  <!-- ============================================================
+       BACKGROUND: same blurred photo as the home page; the dark overlay
+       deepens towards the bottom so the text stays readable
+  ============================================================ -->
+  <div class="fixed inset-0 -z-20 overflow-hidden" aria-hidden="true">
+    <div class="page-bg absolute inset-0"></div>
+  </div>
+  <div class="fixed inset-0 -z-10 bg-gradient-to-b from-slate-950/40 via-slate-950/75 to-slate-950/95" aria-hidden="true"></div>
+
+  <div class="flex min-h-screen flex-col">
+
+    <!-- ============================================================
+         NAVBAR (same as index.html / profile.html, French labels)
+    ============================================================ -->
+    <header class="site-header sticky top-0 z-20">
+      <nav class="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 sm:px-8" aria-label="Navigation principale">
+
+        <!-- Logo -->
+        <a href="index.html" class="site-logo rounded-md font-display text-2xl font-extrabold tracking-tight text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70">
+          CMC <span class="font-semibold text-white/80">stages</span>
+        </a>
+
+        <!-- Center links (desktop). js/main.js marks the current page -->
+        <ul class="absolute left-1/2 hidden -translate-x-1/2 items-center gap-9 lg:flex">
+          <li><a href="index.html" class="nav-link text-sm font-medium text-white/80 transition hover:text-white focus:outline-none focus-visible:text-white focus-visible:underline">Trouver un stage</a></li>
+          <li><a href="entreprise.html" class="nav-link text-sm font-medium text-white/80 transition hover:text-white focus:outline-none focus-visible:text-white focus-visible:underline">Pour les entreprises</a></li>
+          <li><a href="about.html" class="nav-link text-sm font-medium text-white/80 transition hover:text-white focus:outline-none focus-visible:text-white focus-visible:underline">À propos du CMC</a></li>
+        </ul>
+
+        <!-- Guest buttons (desktop): the login modals live on index.html -->
+        <div class="hidden items-center gap-3 lg:flex" data-auth="guest">
+          <a href="index.html#login" class="glass rounded-full px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70">Connexion</a>
+          <a href="index.html#signup" class="site-cta rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-slate-900 shadow-lg shadow-black/20 transition hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900">Inscription</a>
+        </div>
+
+        <!-- Signed-in state (desktop). Shown by js/main.js once a user is stored -->
+        <div class="hidden items-center gap-3 lg:flex" data-auth="user">
+          <a href="profile.html" class="user-pill glass">
+            <span class="user-avatar" data-user="initial" aria-hidden="true"></span>
+            <span class="user-meta">
+              <span data-user="name"></span>
+              <span data-user="role"></span>
+            </span>
+          </a>
+          <button type="button" data-action="logout" class="glass rounded-full px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70">Déconnexion</button>
+        </div>
+
+        <!-- Menu button (mobile / tablet) -->
+        <button id="menu-toggle" type="button" class="glass inline-flex h-11 w-11 items-center justify-center rounded-full text-white transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70 lg:hidden" aria-controls="mobile-menu" aria-expanded="false" aria-label="Ouvrir le menu" data-label-open="Ouvrir le menu" data-label-close="Fermer le menu">
+          <svg id="icon-open" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+          <svg id="icon-close" class="hidden h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>
+        </button>
+      </nav>
+
+      <!-- Mobile menu panel -->
+      <div id="mobile-menu" class="absolute inset-x-0 top-full hidden px-5 sm:px-8 lg:hidden">
+        <div class="rounded-3xl border border-white/15 bg-slate-900/90 p-4 shadow-2xl shadow-black/40 backdrop-blur-xl">
+          <a href="index.html" class="block rounded-2xl px-4 py-3 text-base font-medium text-white/90 hover:bg-white/10">Trouver un stage</a>
+          <a href="entreprise.html" class="block rounded-2xl px-4 py-3 text-base font-medium text-white/90 hover:bg-white/10">Pour les entreprises</a>
+          <a href="about.html" class="block rounded-2xl px-4 py-3 text-base font-medium text-white/90 hover:bg-white/10">À propos du CMC</a>
+          <div class="mt-3 grid grid-cols-2 gap-3 border-t border-white/10 pt-4" data-auth="guest">
+            <a href="index.html#login" class="glass rounded-full px-4 py-2.5 text-center text-sm font-semibold text-white hover:bg-white/20">Connexion</a>
+            <a href="index.html#signup" class="rounded-full bg-white px-4 py-2.5 text-center text-sm font-semibold text-slate-900 hover:bg-slate-100">Inscription</a>
+          </div>
+          <div class="mt-3 flex items-center justify-between gap-3 border-t border-white/10 pt-4" data-auth="user">
+            <a href="profile.html" class="user-pill glass">
+              <span class="user-avatar" data-user="initial" aria-hidden="true"></span>
+              <span class="user-meta">
+                <span data-user="name"></span>
+                <span data-user="role"></span>
+              </span>
+            </a>
+            <button type="button" data-action="logout" class="glass rounded-full px-4 py-2.5 text-sm font-semibold text-white hover:bg-white/20">Déconnexion</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ============================================================
+         À PROPOS
+    ============================================================ -->
+    <main class="mx-auto w-full max-w-7xl flex-1 px-5 pb-16 sm:px-8 sm:pb-24">
+
+      <!-- 1. Small hero: directly on the background, no card -->
+      <section class="mx-auto flex max-w-3xl flex-col items-center py-14 text-center sm:py-20" aria-labelledby="about-title">
+        <span class="hero-reveal hero-reveal-1 glass inline-flex items-center gap-2.5 rounded-full px-4 py-2 text-sm font-medium text-white/90">
+          <span class="h-2 w-2 rounded-full bg-teal-300 shadow-[0_0_10px_2px_rgba(94,234,212,0.6)]"></span>
+          À propos
+        </span>
+
+        <h1 id="about-title" class="hero-reveal hero-reveal-2 mt-7 font-display text-4xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl">
+          Les Cités des Métiers et des Compétences
+        </h1>
+
+        <p class="hero-reveal hero-reveal-3 mt-5 text-lg text-white/75 sm:text-xl">
+          Une nouvelle génération de campus de formation professionnelle, au service des jeunes et des entreprises de chaque région du Maroc.
+        </p>
+      </section>
+
+      <!-- 2. Qu'est-ce que le CMC ? -->
+      <section class="glass rounded-[26px] p-6 sm:p-8" aria-labelledby="what-title">
+        <h2 id="what-title" class="font-display text-2xl font-bold tracking-tight sm:text-3xl">Qu'est-ce que le CMC ?</h2>
+        <p class="mt-4 max-w-4xl text-base leading-relaxed text-white/80 sm:text-lg">
+          Les Cités des Métiers et des Compétences (CMC) sont des plateformes de formation professionnelle multisectorielles portées par l'OFPPT. Lancé en 2019, le programme prévoit une Cité dans chacune des 12 régions du Royaume. Chaque CMC réunit plusieurs pôles métiers, des espaces dédiés aux langues, aux soft skills et à l'entrepreneuriat, et une Maison des stagiaires.
+        </p>
+      </section>
+
+      <!-- 3. Chiffres clés. The final numbers are in the HTML; js/about.js
+           counts up to them once the row is visible (not with reduced motion). -->
+      <section class="mt-14 sm:mt-20" aria-labelledby="figures-title">
+        <h2 id="figures-title" class="font-display text-2xl font-bold tracking-tight sm:text-3xl">Chiffres clés</h2>
+
+        <div id="key-figures" class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div class="glass rounded-[26px] p-6">
+            <p class="font-display text-5xl font-extrabold leading-none tracking-tight" data-count="12">12</p>
+            <p class="mt-3 text-sm text-white/70">Cités prévues, une par région</p>
+          </div>
+          <div class="glass rounded-[26px] p-6">
+            <p class="font-display text-5xl font-extrabold leading-none tracking-tight" data-count="34000">34&nbsp;000</p>
+            <p class="mt-3 text-sm text-white/70">stagiaires par an (objectif du programme)</p>
+          </div>
+          <div class="glass rounded-[26px] p-6">
+            <p class="font-display text-5xl font-extrabold leading-none tracking-tight" data-count="195">195</p>
+            <p class="mt-3 text-sm text-white/70">filières de formation</p>
+          </div>
+          <div class="glass rounded-[26px] p-6">
+            <p class="font-display text-5xl font-extrabold leading-none tracking-tight" data-count="30" data-suffix="&nbsp;%">30&nbsp;%</p>
+            <p class="mt-3 text-sm text-white/70">du programme consacré aux soft skills</p>
+          </div>
+        </div>
+
+        <p class="mt-4 text-xs text-white/50">Source : OFPPT, dossier de presse du programme CMC.</p>
+      </section>
+
+      <!-- 4. Les pôles: same list, order and colours as the home page chips
+           (data-sector picks the dot colour from style.css) -->
+      <section class="mt-14 sm:mt-20" aria-labelledby="poles-title">
+        <h2 id="poles-title" class="font-display text-2xl font-bold tracking-tight sm:text-3xl">Les pôles</h2>
+
+        <ul class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" role="list">
+          <li class="glass rounded-[26px] p-6" data-sector="digital">
+            <div class="flex items-center gap-3">
+              <span class="h-2.5 w-2.5 shrink-0 rounded-full bg-[var(--sector-color)] ring-1 ring-white/25" aria-hidden="true"></span>
+              <h3 class="font-display text-lg font-bold">Digital &amp; IA</h3>
+            </div>
+            <p class="mt-3 text-sm text-white/70">Développement, données et intelligence artificielle.</p>
+          </li>
+          <li class="glass rounded-[26px] p-6" data-sector="sante">
+            <div class="flex items-center gap-3">
+              <span class="h-2.5 w-2.5 shrink-0 rounded-full bg-[var(--sector-color)] ring-1 ring-white/25" aria-hidden="true"></span>
+              <h3 class="font-display text-lg font-bold">Santé</h3>
+            </div>
+            <p class="mt-3 text-sm text-white/70">Métiers du soin, de l'accompagnement et des services de santé.</p>
+          </li>
+          <li class="glass rounded-[26px] p-6" data-sector="industrie">
+            <div class="flex items-center gap-3">
+              <span class="h-2.5 w-2.5 shrink-0 rounded-full bg-[var(--sector-color)] ring-1 ring-white/25" aria-hidden="true"></span>
+              <h3 class="font-display text-lg font-bold">Industrie</h3>
+            </div>
+            <p class="mt-3 text-sm text-white/70">Production, maintenance et procédés industriels.</p>
+          </li>
+          <li class="glass rounded-[26px] p-6" data-sector="agriculture">
+            <div class="flex items-center gap-3">
+              <span class="h-2.5 w-2.5 shrink-0 rounded-full bg-[var(--sector-color)] ring-1 ring-white/25" aria-hidden="true"></span>
+              <h3 class="font-display text-lg font-bold">Agriculture</h3>
+            </div>
+            <p class="mt-3 text-sm text-white/70">Productions végétales et animales, gestion des exploitations.</p>
+          </li>
+          <li class="glass rounded-[26px] p-6" data-sector="agro">
+            <div class="flex items-center gap-3">
+              <span class="h-2.5 w-2.5 shrink-0 rounded-full bg-[var(--sector-color)] ring-1 ring-white/25" aria-hidden="true"></span>
+              <h3 class="font-display text-lg font-bold">Agro-industrie</h3>
+            </div>
+            <p class="mt-3 text-sm text-white/70">Transformation, qualité et conservation des produits alimentaires.</p>
+          </li>
+          <li class="glass rounded-[26px] p-6" data-sector="peche">
+            <div class="flex items-center gap-3">
+              <span class="h-2.5 w-2.5 shrink-0 rounded-full bg-[var(--sector-color)] ring-1 ring-white/25" aria-hidden="true"></span>
+              <h3 class="font-display text-lg font-bold">Pêche</h3>
+            </div>
+            <p class="mt-3 text-sm text-white/70">Pêche maritime, aquaculture et valorisation des produits de la mer.</p>
+          </li>
+          <li class="glass rounded-[26px] p-6" data-sector="arts">
+            <div class="flex items-center gap-3">
+              <span class="h-2.5 w-2.5 shrink-0 rounded-full bg-[var(--sector-color)] ring-1 ring-white/25" aria-hidden="true"></span>
+              <h3 class="font-display text-lg font-bold">Arts &amp; Industries Graphiques</h3>
+            </div>
+            <p class="mt-3 text-sm text-white/70">Design graphique, impression et production visuelle.</p>
+          </li>
+          <li class="glass rounded-[26px] p-6" data-sector="gestion">
+            <div class="flex items-center gap-3">
+              <span class="h-2.5 w-2.5 shrink-0 rounded-full bg-[var(--sector-color)] ring-1 ring-white/25" aria-hidden="true"></span>
+              <h3 class="font-display text-lg font-bold">Gestion &amp; Commerce</h3>
+            </div>
+            <p class="mt-3 text-sm text-white/70">Comptabilité, commerce, logistique et gestion d'entreprise.</p>
+          </li>
+          <li class="glass rounded-[26px] p-6" data-sector="tourisme">
+            <div class="flex items-center gap-3">
+              <span class="h-2.5 w-2.5 shrink-0 rounded-full bg-[var(--sector-color)] ring-1 ring-white/25" aria-hidden="true"></span>
+              <h3 class="font-display text-lg font-bold">Tourisme, Hôtellerie &amp; Restauration</h3>
+            </div>
+            <p class="mt-3 text-sm text-white/70">Accueil, hébergement, restauration et métiers du voyage.</p>
+          </li>
+        </ul>
+      </section>
+      <!-- 5. Pourquoi CMC stages ? -->
+      <section class="glass mt-14 rounded-[26px] p-6 sm:mt-20 sm:p-8" aria-labelledby="why-title">
+        <h2 id="why-title" class="font-display text-2xl font-bold tracking-tight sm:text-3xl">Pourquoi CMC stages ?</h2>
+        <p class="mt-4 max-w-4xl text-base leading-relaxed text-white/80 sm:text-lg">
+          CMC stages relie les stagiaires des CMC aux entreprises qui recrutent. Chaque projet publié par un stagiaire est validé avant d'atteindre un recruteur.
+        </p>
+
+        <!-- Validation path: the three steps shown on each project card of profile.html -->
+        <ol class="mt-8 grid gap-4 sm:grid-cols-3">
+          <li class="flex items-start gap-4 rounded-2xl border border-white/10 bg-white/5 p-5">
+            <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-teal-300 font-display text-sm font-extrabold text-slate-900" aria-hidden="true">1</span>
+            <div>
+              <h3 class="font-display text-base font-bold">Formateur</h3>
+              <p class="mt-1 text-sm text-white/70">Valide la qualité du projet.</p>
+            </div>
+          </li>
+          <li class="flex items-start gap-4 rounded-2xl border border-white/10 bg-white/5 p-5">
+            <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-teal-300 font-display text-sm font-extrabold text-slate-900" aria-hidden="true">2</span>
+            <div>
+              <h3 class="font-display text-base font-bold">Pôle orientation</h3>
+              <p class="mt-1 text-sm text-white/70">Vérifie le profil et l'oriente.</p>
+            </div>
+          </li>
+          <li class="flex items-start gap-4 rounded-2xl border border-white/10 bg-white/5 p-5">
+            <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-teal-300 font-display text-sm font-extrabold text-slate-900" aria-hidden="true">3</span>
+            <div>
+              <h3 class="font-display text-base font-bold">Recruteur</h3>
+              <p class="mt-1 text-sm text-white/70">Découvre le stagiaire et propose un stage.</p>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <!-- 6. Call to action. The sign up modal lives on index.html -->
+      <section class="mt-14 flex flex-col items-center text-center sm:mt-20" aria-labelledby="cta-title">
+        <h2 id="cta-title" class="font-display text-3xl font-extrabold tracking-tight sm:text-4xl">Prêt à commencer ?</h2>
+        <div class="mt-7 flex flex-wrap items-center justify-center gap-3">
+          <a href="index.html#signup" class="rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-900 shadow-lg shadow-black/20 transition hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900">Je suis stagiaire</a>
+          <a href="index.html#signup" class="glass rounded-full px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70">Je suis une entreprise</a>
+        </div>
+      </section>
+    </main>
+
+    <!-- 7. Footer line -->
+    <footer class="mx-auto w-full max-w-7xl px-5 pb-8 text-center text-xs text-white/50 sm:px-8">
+      Projet étudiant, non affilié officiellement à l'OFPPT.
+    </footer>
+  </div>
+
+  <!-- Scripts: shared behaviour first, then this page -->
+  <script src="js/main.js"></script>
+  <script src="js/about.js"></script>
+</body>
+</html>
