@@ -1,248 +1,544 @@
 /* ============================================================
-   CMC stages — profile page styles (profile.html only)
-   Shared tokens, .glass, navbar, sector colours, glass cards, page
-   head, chips and filter pills: see style.css.
+   CMC stages — student dashboard styles (profile.html only)
+   Shared tokens, .glass, navbar, sector colours, glass cards, avatar,
+   chips and select fields: see style.css.
+
+   Everything that restyles a shared component is scoped to body.dash,
+   so the other pages keep their look.
 ============================================================ */
 
 :root {
-  --left-col: 350px;                 /* width of the level/streak column */
+  /* Dashboard palette: navy surfaces, electric blue + turquoise accents */
+  --dash-surface: rgba(13, 22, 45, 0.62);
+  --dash-line: rgba(148, 178, 255, 0.14);
+  --dash-line-strong: rgba(148, 178, 255, 0.28);
+  --dash-blue: #2f6bff;
+  --dash-blue-soft: #7aa5ff;
+  --dash-cyan: #2dd4bf;
+  --dash-muted: rgba(226, 234, 255, 0.62);
+  --dash-ease: cubic-bezier(0.22, 1, 0.36, 1);
 
-  /* Heatmap */
-  --hm-cell: 16px;
-  --hm-gap: 4px;
-  --hm-0: rgba(255, 255, 255, 0.08);
-  --hm-1: #2a4fae;
-  --hm-2: #4474e6;
-  --hm-3: #86a9ff;
-  --hm-4: #d5e1ff;
+  /* Attendance squares (every square also carries its state in its title) */
+  --day-size: 16px;
+  --day-gap: 4px;
+  --day-none: rgba(148, 178, 255, 0.09);
+  --day-present: #3b76ff;
+  --day-late: #ffb84d;
+  --day-absent: #ff6b81;
 
-  /* Status colours (always paired with a text label) */
-  --streak: #ff9a3c;
-  --mint: #7be0b8;
-  --amber: #ffb84d;
-  --track-empty: rgba(255, 255, 255, 0.14);
+  /* Status colours (always paired with an icon and a text label) */
+  --status-ok: #5eead4;
+  --status-wait: #ffc56b;
 }
 
-/* ---------- Background overlay: navy, lighter at the top ---------- */
-.profile-overlay {
-  background: linear-gradient(180deg,
-    rgba(7, 21, 43, 0.35) 0%,
-    rgba(7, 21, 43, 0.78) 50%,
-    rgba(7, 21, 43, 0.97) 100%);
+/* The page background is the shared one of index.html (.page-bg + .page-overlay
+   in style.css); this file adds no background of its own. */
+
+/* ---------- Floating navigation bar ----------
+   A dark glass pill from the first pixel; scrolling only deepens it.
+   The rules below undo the white "is-scrolled" state of style.css. */
+body.dash .site-header,
+body.dash .site-header.is-scrolled {
+  padding: 0.75rem 0.75rem 0;
 }
 
-/* ---------- Two-column row ---------- */
-.profile-grid {
-  display: grid;
-  grid-template-columns: var(--left-col) minmax(0, 1fr);
-  gap: 1.5rem;
-  margin-top: 2rem;
+body.dash .site-header nav,
+body.dash .site-header.is-scrolled nav {
+  max-width: 72rem;
+  height: 4.25rem;
+  border: 1px solid var(--dash-line);
+  background-color: rgba(10, 18, 38, 0.55);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  backdrop-filter: blur(18px) saturate(150%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 18px 40px -22px rgba(0, 0, 0, 0.8);
+  transition: background-color 300ms ease, border-color 300ms ease, box-shadow 300ms ease;
 }
 
-.profile-col {
-  display: grid;
-  align-content: start;
-  gap: 1.5rem;
+body.dash .site-header.is-scrolled nav {
+  border-color: var(--dash-line-strong);
+  background-color: rgba(8, 14, 30, 0.86);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 24px 48px -20px rgba(0, 0, 0, 0.9),
+    0 0 0 1px rgba(47, 107, 255, 0.08);
 }
 
-/* Level */
-.level-row {
+body.dash .site-header.is-scrolled .site-logo { color: #fff; }
+body.dash .site-header.is-scrolled .site-logo span { color: rgba(255, 255, 255, 0.8); }
+body.dash .site-header.is-scrolled .nav-link { color: rgba(255, 255, 255, 0.8); }
+body.dash .site-header.is-scrolled .nav-link:hover,
+body.dash .site-header.is-scrolled .nav-link[aria-current="page"] { color: #fff; }
+body.dash .site-header .nav-link::after,
+body.dash .site-header.is-scrolled .nav-link::after {
+  background: linear-gradient(90deg, var(--dash-blue-soft), var(--dash-cyan));
+}
+
+body.dash .site-header nav .glass,
+body.dash .site-header.is-scrolled nav .glass {
+  color: #fff;
+  background-color: rgba(148, 178, 255, 0.08);
+  border-color: var(--dash-line);
+}
+
+body.dash .site-header nav .glass:hover,
+body.dash .site-header.is-scrolled nav .glass:hover {
+  background-color: rgba(148, 178, 255, 0.18);
+  border-color: var(--dash-line-strong);
+}
+
+body.dash .site-header.is-scrolled nav .user-meta [data-user="role"] {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+body.dash .site-header.is-scrolled .site-cta {
+  color: #0f172a;
+  background-color: #fff;
+}
+
+body.dash .user-avatar {
+  background: linear-gradient(135deg, var(--dash-blue-soft), var(--dash-cyan));
+}
+
+@media (min-width: 640px) {
+  body.dash .site-header,
+  body.dash .site-header.is-scrolled {
+    padding: 1rem 1.5rem 0;
+  }
+}
+
+/* ---------- Cards and chips (dashboard skin of the shared components) ---------- */
+body.dash .glass-card {
+  position: relative;
+  border-color: var(--dash-line);
+  border-radius: 22px;
+  background:
+    linear-gradient(180deg, rgba(148, 178, 255, 0.07) 0%, rgba(148, 178, 255, 0.02) 100%),
+    var(--dash-surface);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  backdrop-filter: blur(20px) saturate(140%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 30px 60px -36px rgba(0, 0, 0, 0.85);
+  transition: border-color 250ms ease, box-shadow 250ms ease;
+}
+
+body.dash .glass-card:hover {
+  border-color: var(--dash-line-strong);
+}
+
+body.dash .card-title {
+  font-size: 1.125rem;
+  letter-spacing: -0.015em;
+}
+
+body.dash .card-meta {
+  color: var(--dash-muted);
+}
+
+body.dash .pchip.glass {
+  border-color: var(--dash-line);
+  background-color: rgba(148, 178, 255, 0.08);
+  transition: background-color 150ms ease, border-color 150ms ease, transform 150ms ease;
+}
+
+body.dash .pchip.glass:hover {
+  border-color: var(--dash-line-strong);
+  background-color: rgba(148, 178, 255, 0.14);
+}
+
+/* ---------- Header: avatar, name, level bar, skills + action ---------- */
+.profile-top {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: flex-start;
   gap: 1rem;
-  margin-top: 0.75rem;
+  margin-top: 1rem;
 }
 
-.level-value {
-  font-family: "Plus Jakarta Sans", Inter, ui-sans-serif, sans-serif;
-  font-size: 2.25rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  line-height: 1;
+/* Gradient ring + glow around the line-drawn portrait */
+body.dash .avatar-xl {
+  border: 3px solid transparent;
+  background:
+    radial-gradient(circle at 30% 20%, #1b2c58 0%, #0c1530 70%) padding-box,
+    linear-gradient(135deg, var(--dash-blue) 0%, var(--dash-cyan) 100%) border-box;
+  box-shadow:
+    0 0 0 6px rgba(47, 107, 255, 0.10),
+    0 18px 44px -14px rgba(47, 107, 255, 0.65);
+  transition: transform 300ms var(--dash-ease), box-shadow 300ms ease;
 }
 
-.level-xp {
-  font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.7);
+body.dash .avatar-xl:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow:
+    0 0 0 6px rgba(47, 107, 255, 0.16),
+    0 22px 50px -14px rgba(47, 107, 255, 0.8);
+}
+
+.avatar-portrait {
+  color: rgba(236, 242, 255, 0.92);
+}
+
+.avatar-portrait svg {
+  width: 72%;
+  height: 72%;
+}
+
+.level-bar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: 40rem;
+}
+
+.level-bar .progress {
+  flex: 1 1 auto;
 }
 
 .progress {
   height: 10px;
-  margin-top: 1rem;
   border-radius: 9999px;
-  background-color: rgba(255, 255, 255, 0.12);
+  background-color: rgba(148, 178, 255, 0.12);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.35);
   overflow: hidden;
 }
 
 .progress-fill {
+  position: relative;
   display: block;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, var(--hm-2), var(--hm-3));
+  background: linear-gradient(90deg, var(--dash-blue) 0%, var(--dash-blue-soft) 60%, var(--dash-cyan) 100%);
 }
 
-.level-progress .progress-fill {
+@keyframes bar-grow {
+  from { width: 0; }
+}
+
+@keyframes bar-sheen {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(350%); }
+}
+
+.level-fill {
   width: 80%; /* 640 / 800 XP */
+  box-shadow: 0 0 16px rgba(47, 107, 255, 0.7);
+  animation: bar-grow 1100ms var(--dash-ease) 350ms backwards;
+  overflow: hidden;
 }
 
-/* Streak */
-.streak-card {
-  display: flex;
-  align-items: center;
-  gap: 1.25rem;
-}
-
-.streak-ring {
-  position: relative;
-  display: flex;
-  flex: 0 0 auto;
-  width: 92px;
-  height: 92px;
-  align-items: center;
-  justify-content: center;
-  border: 4px solid var(--streak);
-  border-radius: 9999px;
-  box-shadow: 0 0 28px -8px rgba(255, 154, 60, 0.7);
-  font-family: "Plus Jakarta Sans", Inter, ui-sans-serif, sans-serif;
-  font-size: 2rem;
-  font-weight: 800;
-}
-
-.streak-flame {
+/* A light sweep crosses the level bar every few seconds */
+.level-fill::after {
+  content: '';
   position: absolute;
-  top: -15px;
-  left: 50%;
-  display: flex;
-  width: 28px;
-  height: 28px;
-  align-items: center;
-  justify-content: center;
+  inset: 0;
+  width: 35%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  animation: bar-sheen 3.6s ease-in-out 1.6s infinite;
+}
+
+.level-label {
+  flex: 0 0 auto;
+  padding: 0.3125rem 0.75rem;
+  border: 1px solid var(--dash-line-strong);
   border-radius: 9999px;
-  background-color: var(--streak);
-  color: #1a0e05;
-  transform: translateX(-50%);
-}
-
-.streak-title {
-  margin-top: 0.25rem;
+  background-color: rgba(47, 107, 255, 0.16);
   font-family: "Plus Jakarta Sans", Inter, ui-sans-serif, sans-serif;
-  font-size: 1.25rem;
-  font-weight: 700;
-}
-
-.streak-sub {
-  margin-top: 0.125rem;
   font-size: 0.8125rem;
-  color: rgba(255, 255, 255, 0.6);
-}
-
-/* ---------- Activity heatmap ---------- */
-.hm-scroll {
-  margin-top: 1.25rem;
-  overflow-x: auto;
-  padding-bottom: 0.25rem;
-  scrollbar-width: thin;
-}
-
-.hm {
-  display: grid;
-  grid-template-columns: auto max-content;
-  grid-template-rows: auto auto;
-  column-gap: 6px;
-  row-gap: 6px;
-  width: max-content;
-}
-
-.hm-months {
-  grid-column: 2;
-  grid-row: 1;
-  display: grid;                 /* columns are set by js/profile.js */
-  column-gap: var(--hm-gap);
-  height: 14px;
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.55);
-}
-
-.hm-months span {
-  grid-row: 1;
+  font-weight: 700;
+  letter-spacing: 0.01em;
   white-space: nowrap;
 }
 
-.hm-days {
-  grid-column: 1;
-  grid-row: 2;
-  display: grid;
-  grid-template-rows: repeat(7, var(--hm-cell));
-  row-gap: var(--hm-gap);
-  align-items: center;
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.55);
+.level-caption {
+  margin-top: -0.5rem;
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.75); /* sits on the photo: same as the home hero sub-text (text-white/75) */
 }
 
-.hm-grid {
-  grid-column: 2;
-  grid-row: 2;
-  display: grid;
-  grid-auto-flow: column;        /* fills Mon→Sun down each week column */
-  grid-template-rows: repeat(7, var(--hm-cell));
-  grid-auto-columns: var(--hm-cell);
-  gap: var(--hm-gap);
-}
-
-.hm-cell {
-  display: block;
-  width: var(--hm-cell);
-  height: var(--hm-cell);
-  border-radius: 4px;
-  background-color: var(--hm-0);
-}
-
-.hm-cell.hm-l1 { background-color: var(--hm-1); }
-.hm-cell.hm-l2 { background-color: var(--hm-2); }
-.hm-cell.hm-l3 { background-color: var(--hm-3); }
-.hm-cell.hm-l4 { background-color: var(--hm-4); }
-
-.hm-cell.hm-streak {
-  box-shadow: inset 0 0 0 1.5px var(--streak);
-}
-
-.hm-cell.hm-pad {
-  visibility: hidden; /* fills the first column when the period doesn't start on a Monday */
-}
-
-.hm-legend {
+.head-row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 0.5rem 1rem;
-  margin-top: 1rem;
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.6);
+  gap: 1rem 1.5rem;
+  width: 100%;
+  margin-top: 0.25rem;
 }
 
-.hm-legend-scale {
+.head-row .profile-chips {
+  margin-top: 0;
+}
+
+/* Skills added by the trainee: chip + small remove button */
+.pchip-custom {
+  padding-right: 0.375rem;
+  animation: chip-in 260ms var(--dash-ease) backwards;
+}
+
+@keyframes chip-in {
+  from { opacity: 0; transform: scale(0.85); }
+}
+
+.pchip-remove {
+  display: inline-flex;
+  width: 1.375rem;
+  height: 1.375rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  color: rgba(255, 255, 255, 0.6);
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.pchip-remove:hover {
+  background-color: rgba(255, 107, 129, 0.25);
+  color: #fff;
+}
+
+.pchip-remove svg {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+/* Inline "new skill" field, shown in place of the "+ Compétence" button */
+.pchip-input {
+  padding: 0 0.875rem;
+  border-color: var(--dash-blue-soft) !important;
+  box-shadow: 0 0 0 3px rgba(47, 107, 255, 0.25);
+}
+
+.pchip-input input {
+  width: 11rem;
+  max-width: 60vw;
+  height: 2.25rem;
+  background: transparent;
+  color: #fff;
+  font-size: 0.875rem;
+}
+
+.pchip-input input::placeholder {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.pchip-input input:focus {
+  outline: none;
+}
+
+body.dash .pchip-add {
+  border-style: dashed;
+  border-color: rgba(148, 178, 255, 0.4);
+  background-color: transparent;
+  color: var(--dash-blue-soft);
+}
+
+body.dash .pchip-add:hover {
+  border-style: solid;
+  color: #fff;
+}
+
+/* Primary action: electric blue pill */
+.btn-accent {
   display: inline-flex;
   align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.375rem;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, #4a84ff 0%, #2a5cf0 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    0 10px 26px -10px rgba(47, 107, 255, 0.85);
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 180ms var(--dash-ease), box-shadow 180ms ease, filter 180ms ease;
+}
+
+.btn-accent:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.32),
+    0 16px 32px -10px rgba(47, 107, 255, 0.95);
+}
+
+.btn-accent:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.btn-accent:focus-visible,
+.pchip-remove:focus-visible,
+.more-link:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.8);
+  outline-offset: 2px;
+}
+
+/* ---------- Two columns ---------- */
+.profile-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 1.5rem; /* cards stretch to the taller one, so both end level */
+  margin-top: 2rem;
+}
+
+/* Header on top, legend at the bottom, months spread evenly in what is left */
+.presence-card {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- Présence (activity heatmap) ---------- */
+.presence-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+}
+
+.presence-meta {
+  margin-left: auto;
+}
+
+/* Compact year dropdown (shares the .field select chevron and colours) */
+.year-select {
+  display: inline-block;
+}
+
+.year-select select {
+  width: auto;
+  height: 2rem;
+  padding: 0 2.25rem 0 0.875rem;
+  border-color: var(--dash-line);
+  border-radius: 9999px;
+  background-color: rgba(148, 178, 255, 0.08);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.year-select select:hover {
+  border-color: var(--dash-line-strong);
+}
+
+/* Previous / next month arrows */
+.month-nav {
+  display: inline-flex;
   gap: 0.375rem;
 }
 
-.hm-legend .hm-cell {
+.month-arrow {
+  display: inline-flex;
+  width: 2rem;
+  height: 2rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  color: #fff;
+  transition: background-color 150ms ease, border-color 150ms ease, opacity 150ms ease;
+}
+
+.month-arrow:hover:not(:disabled) {
+  border-color: var(--dash-line-strong);
+  background-color: rgba(148, 178, 255, 0.18);
+}
+
+.month-arrow:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.month-arrow:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.8);
+  outline-offset: 2px;
+}
+
+/* The visible months: a 2 × 2 grid in reading order (two stacked on mobile).
+   space-evenly shares the card's spare height between the rows, so there
+   is no large gap under the header or above the legend. */
+.months {
+  display: grid;
+  flex: 1 1 auto;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-content: space-evenly;
+  gap: 1.5rem 1rem;
+  margin-top: 1.25rem;
+}
+
+.month {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.month-name {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dash-muted);
+}
+
+/* Weeks as rows, Monday → Friday as the 5 columns */
+.month-grid {
+  display: grid;
+  grid-template-columns: repeat(5, var(--day-size));
+  gap: var(--day-gap);
+}
+
+.day {
+  display: block;
+  width: var(--day-size);
+  height: var(--day-size);
+  border-radius: 5px;
+  background-color: var(--day-none);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  transition: transform 150ms var(--dash-ease), box-shadow 150ms ease;
+}
+
+.day.is-present { background-color: var(--day-present); }
+.day.is-late    { background-color: var(--day-late); }
+.day.is-absent  { background-color: var(--day-absent); }
+
+.month-grid .day:hover {
+  transform: scale(1.3);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.7), 0 6px 14px -4px rgba(0, 0, 0, 0.7);
+}
+
+.day.is-pad {
+  visibility: hidden; /* fills the first row when the month does not start on a Monday */
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.125rem;
+  margin: 1.5rem 0 0;
+  padding: 1rem 0 0;
+  border-top: 1px solid var(--dash-line);
+  list-style: none;
+  font-size: 0.75rem;
+  color: var(--dash-muted);
+}
+
+.legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4375rem;
+}
+
+.legend .day {
   width: 12px;
   height: 12px;
-  border-radius: 3px;
+  border-radius: 4px;
 }
 
-/* ---------- Recent projects ---------- */
-.projects {
-  margin-top: 1.5rem;
-}
-
-.projects-grid {
+/* ---------- Projets récents ---------- */
+.projects-list {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
+  gap: 0.875rem;
   margin-top: 1.25rem;
 }
 
@@ -251,9 +547,17 @@
   flex-direction: column;
   gap: 0.875rem;
   padding: 1.125rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
-  background-color: var(--inner-bg);
+  border: 1px solid var(--dash-line);
+  border-radius: 16px;
+  background-color: rgba(148, 178, 255, 0.045);
+  transition: transform 220ms var(--dash-ease), border-color 220ms ease, background-color 220ms ease, box-shadow 220ms ease;
+}
+
+.project-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--dash-line-strong);
+  background-color: rgba(148, 178, 255, 0.08);
+  box-shadow: 0 18px 36px -22px rgba(47, 107, 255, 0.7);
 }
 
 .project-top {
@@ -264,15 +568,19 @@
 }
 
 .project-tag {
-  padding: 0.25rem 0.625rem;
+  padding: 0.1875rem 0.625rem;
+  border: 1px solid rgba(122, 165, 255, 0.35);
   border-radius: 9999px;
-  font-size: 0.75rem;
+  background-color: rgba(47, 107, 255, 0.16);
+  color: #cfe0ff;
+  font-size: 0.6875rem;
   font-weight: 600;
+  letter-spacing: 0.04em;
 }
 
 .project-time {
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.55);
+  color: var(--dash-muted);
   white-space: nowrap;
 }
 
@@ -280,69 +588,114 @@
   font-family: "Plus Jakarta Sans", Inter, ui-sans-serif, sans-serif;
   font-size: 1.0625rem;
   font-weight: 700;
+  letter-spacing: -0.01em;
   line-height: 1.3;
 }
 
-/* 3-step validation track */
-.track {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 4px;
-  margin-top: auto;
+/* One bar per card: full when validated, empty while pending */
+.project-bar {
+  height: 8px;
 }
 
-.track-seg {
-  height: 6px;
-  border-radius: 9999px;
-  background-color: var(--track-empty);
+.project-bar .progress-fill {
+  width: 0;
+  transition: width 900ms var(--dash-ease);
 }
 
-.track-seg.is-done    { background-color: var(--mint); }
-.track-seg.is-current { background-color: var(--amber); }
-
-.track-labels {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 4px;
-  margin-top: -0.375rem;
-  font-size: 0.6875rem;
-  color: rgba(255, 255, 255, 0.5);
+.project-bar.is-validated .progress-fill {
+  width: 100%;
+  background: linear-gradient(90deg, var(--dash-blue) 0%, var(--dash-cyan) 100%);
 }
 
-.track-labels span:nth-child(2) { text-align: center; }
-.track-labels span:nth-child(3) { text-align: right; }
-
+/* Status: icon + text, coloured as a bonus */
 .project-status {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4375rem;
   font-size: 0.8125rem;
+  font-weight: 500;
   color: rgba(255, 255, 255, 0.8);
 }
 
-.status-dot {
-  width: 0.5rem;
-  height: 0.5rem;
+.project-status svg {
+  width: 1rem;
+  height: 1rem;
   flex: 0 0 auto;
-  border-radius: 9999px;
-  background-color: var(--track-empty);
 }
 
-.status-dot.is-validated { background-color: var(--mint); }
-.status-dot.is-pending   { background-color: var(--amber); }
+.project-status.is-validated { color: var(--status-ok); }
+.project-status.is-pending   { color: var(--status-wait); }
+
+.more-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 1.25rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--dash-blue-soft);
+  text-decoration: none;
+  transition: color 150ms ease;
+}
+
+.more-link svg {
+  transition: transform 200ms var(--dash-ease);
+}
+
+.more-link:hover {
+  color: #fff;
+}
+
+.more-link:hover svg {
+  transform: translateX(3px);
+}
 
 /* ---------- Responsive ---------- */
 
-/* Two-column row stacks; the heatmap keeps scrolling inside its card */
-@media (max-width: 1099px) {
+/* Tablet and mobile: the two columns stack, Présence first */
+@media (max-width: 1023px) {
   .profile-grid {
     grid-template-columns: minmax(0, 1fr);
   }
 }
 
-/* Project cards in one column */
-@media (max-width: 799px) {
-  .projects-grid {
+@media (max-width: 639px) {
+  .presence-meta {
+    flex-basis: 100%;
+    margin-left: 0;
+  }
+
+  .head-row .btn-accent {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Mobile: two months stacked (js/profile.js renders two blocks below 768px) */
+@media (max-width: 767px) {
+  .months {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .level-fill,
+  .level-fill::after,
+  .pchip-custom {
+    animation: none;
+  }
+
+  .level-fill::after {
+    display: none;
+  }
+
+  .btn-accent:hover,
+  .project-card:hover,
+  .month-grid .day:hover,
+  .more-link:hover svg,
+  body.dash .avatar-xl:hover {
+    transform: none;
   }
 }

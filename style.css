@@ -29,6 +29,12 @@
   transform: scale(1.02); /* hides the soft edge created by the blur */
 }
 
+/* Flat dark veil over the photo (slate-950 at 40%). Shared by index.html
+   and profile.html so both pages have exactly the same background. */
+.page-overlay {
+  background-color: rgba(2, 6, 23, 0.4);
+}
+
 /* ---------- Frosted glass (navbar buttons, badge, chips) ---------- */
 .glass {
   background-color: rgba(255, 255, 255, 0.10);
@@ -784,8 +790,7 @@ dialog.modal.is-closing .modal-panel { animation: modal-pop 200ms ease reverse b
 }
 
 /* ---------- Shared page components (profile.html, entreprise.html) ----------
-   Glass cards, page head with a large avatar, chips, filter pills and
-   select fields. Page-specific styles live in profile.css / entreprise.css. */
+   Glass cards, page head with a large avatar, chips and select fields. Page-specific styles live in profile.css / entreprise.css. */
 :root {
   --card-bg: rgba(255, 255, 255, 0.08);
   --card-border: rgba(255, 255, 255, 0.16);
@@ -923,54 +928,12 @@ button.pchip:hover {
   transform: translateY(-2px);
 }
 
-.pchip-divider {
-  width: 1px;
-  height: 1.25rem;
-  margin: 0 0.25rem;
-  background-color: rgba(255, 255, 255, 0.22);
-}
-
 .btn-white {
   flex: 0 0 auto;
   white-space: nowrap;
 }
 
-/* Filter pills (aria-pressed marks the active one) */
-.filter-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.filter-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.375rem;
-  padding: 0.4375rem 0.875rem;
-  border-radius: 9999px;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.85);
-  transition: background-color 150ms ease, color 150ms ease;
-}
-
-.filter-pill:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-}
-
-.filter-pill[aria-pressed="true"] {
-  background-color: #fff;
-  border-color: #fff;
-  color: #0b1f3a;
-}
-
-.filter-count {
-  font-size: 0.75rem;
-  opacity: 0.7;
-}
-
-.pchip:focus-visible,
-.filter-pill:focus-visible {
+.pchip:focus-visible {
   outline: 2px solid rgba(255, 255, 255, 0.75);
   outline-offset: 2px;
 }

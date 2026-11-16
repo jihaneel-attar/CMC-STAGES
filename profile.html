@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sara Benani — CMC stages</title>
-  <meta name="description" content="Profil stagiaire sur CMC stages : niveau, série, activité et projets récents." />
+  <meta name="description" content="Profil stagiaire sur CMC stages : niveau, présence et projets récents." />
 
   <!-- Fonts (same as index.html) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -20,16 +20,17 @@
   <link rel="stylesheet" href="profile.css" />
 </head>
 
-<body class="relative min-h-screen overflow-x-hidden bg-slate-950 font-sans text-white antialiased">
+<!-- .dash turns on the dashboard theme (profile.css): navy backdrop, floating dark navbar, refined cards -->
+<body class="dash relative min-h-screen overflow-x-hidden bg-slate-950 font-sans text-white antialiased">
 
   <!-- ============================================================
-       BACKGROUND: same blurred photo as the home page, with a navy
-       gradient overlay (light at the top, almost opaque at the bottom)
+       BACKGROUND: identical to index.html — blurred photo (.page-bg)
+       + flat dark overlay (.page-overlay), both in style.css
   ============================================================ -->
   <div class="fixed inset-0 -z-20 overflow-hidden" aria-hidden="true">
     <div class="page-bg absolute inset-0"></div>
   </div>
-  <div class="profile-overlay fixed inset-0 -z-10" aria-hidden="true"></div>
+  <div class="page-overlay fixed inset-0 -z-10" aria-hidden="true"></div>
 
   <div class="flex min-h-screen flex-col">
 
@@ -102,128 +103,103 @@
     </header>
 
     <!-- ============================================================
-         PROFILE
+         PROFILE — layout from design/profile-sketch.jpg
     ============================================================ -->
     <main class="mx-auto w-full max-w-7xl flex-1 px-5 pb-16 pt-6 sm:px-8 sm:pt-10">
 
-      <!-- Profile header: directly on the background, no card -->
-      <section class="profile-head" aria-labelledby="profile-name">
-        <div class="profile-identity">
-          <div class="avatar-xl" data-sector="digital" aria-hidden="true">SB</div>
-
-          <div class="min-w-0">
-            <h1 id="profile-name" class="font-display text-4xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-[56px]">
-              Sara Benani
-            </h1>
-
-            <div class="profile-chips">
-              <span class="pchip glass" data-sector="digital">
-                <span class="pchip-dot" aria-hidden="true"></span>
-                Digital &amp; IA · Digital Design
-              </span>
-              <span class="pchip-divider" aria-hidden="true"></span>
-              <span class="pchip glass">Figma</span>
-              <span class="pchip glass">UI/UX</span>
-              <span class="pchip glass">Prototype</span>
-              <button type="button" class="pchip pchip-add glass" aria-label="Ajouter une compétence" data-owner-only>+ Compétence</button>
-            </div>
-          </div>
+      <!-- Header: directly on the background, stacked and left aligned -->
+      <section class="profile-top hero-reveal hero-reveal-1" aria-labelledby="profile-name">
+        <!-- Illustrated portrait (inline line drawing; swap for Images/avatar-sara.png when it exists) -->
+        <div class="avatar-xl avatar-portrait" aria-hidden="true">
+          <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 58c1.5-10 8.5-15 18-15s16.5 5 18 15" />
+            <circle cx="32" cy="27" r="11.5" />
+            <path d="M20.5 25.5c1.5-8 6-11.5 11.5-11.5s10 3.5 11.5 11.5" />
+            <path d="M20.5 25.5c-1 5-.5 9.5 1.5 12M43.5 25.5c1 5 .5 9.5-1.5 12" />
+          </svg>
         </div>
 
-        <!-- Owner controls; with ?view=public js/profile.js hides them and shows the recruiter button -->
-        <a href="#" class="btn-white rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-900 shadow-lg shadow-black/20 transition hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900" data-owner-only>
-          + Ajouter un projet
-        </a>
-        <a href="#" class="btn-white rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-900 shadow-lg shadow-black/20 transition hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900" data-public-only hidden>
-          Proposer un stage
-        </a>
+        <h1 id="profile-name" class="font-display text-4xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-[56px]">
+          Sara Benani
+        </h1>
+
+        <!-- Level bar: 640 / 800 XP towards level 8 -->
+        <div class="level-bar">
+          <div class="progress" role="progressbar" aria-label="Progression vers le niveau 8" aria-valuemin="0" aria-valuemax="800" aria-valuenow="640">
+            <span class="progress-fill level-fill"></span>
+          </div>
+          <span class="level-label">Level 7</span>
+        </div>
+        <p class="level-caption">640 / 800 XP · encore 160 XP pour passer au niveau 8</p>
+
+        <!-- Skills on the left, project button on the right.
+             Owner controls carry data-owner-only; ?view=public hides them (js/profile.js).
+             "+ Compétence" opens an inline field; added skills are kept by js/profile.js -->
+        <div class="head-row">
+          <div id="skills" class="profile-chips">
+            <span class="pchip glass">Figma</span>
+            <span class="pchip glass">UI/UX</span>
+            <span class="pchip glass">Prototype</span>
+            <button type="button" id="add-skill" class="pchip pchip-add glass" aria-label="Ajouter une compétence" data-owner-only>+ Compétence</button>
+          </div>
+
+          <a href="#" class="btn-white btn-accent" data-owner-only>
+            + Ajouter un projet
+          </a>
+          <a href="#" class="btn-white btn-accent" data-public-only hidden>
+            Proposer un stage
+          </a>
+        </div>
       </section>
 
-      <!-- Two columns: level + streak on the left, activity on the right -->
-      <section class="profile-grid" aria-label="Progression">
+      <!-- Two columns: attendance on the left, projects on the right -->
+      <section class="profile-grid" aria-label="Présence et projets">
 
-        <div class="profile-col">
-          <!-- Level -->
-          <article class="glass-card level-card" aria-labelledby="level-title">
-            <p id="level-title" class="card-label">Niveau</p>
-            <div class="level-row">
-              <p class="level-value">Level 7</p>
-              <p class="level-xp">640 / 800 XP</p>
+        <article class="glass-card presence-card hero-reveal hero-reveal-2" aria-labelledby="presence-title">
+          <div class="presence-head">
+            <h2 id="presence-title" class="card-title">Présence</h2>
+            <label class="field year-select">
+              <span class="sr-only">Année scolaire</span>
+              <select id="presence-year">
+                <option value="2026" selected>2026</option>
+                <option value="2025">2025</option>
+              </select>
+            </label>
+            <!-- Move through the months one step at a time (js/profile.js disables an arrow at each end) -->
+            <div class="month-nav" role="group" aria-label="Changer de mois">
+              <button type="button" id="month-prev" class="month-arrow glass" aria-label="Mois précédent">
+                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6" /></svg>
+              </button>
+              <button type="button" id="month-next" class="month-arrow glass" aria-label="Mois suivant">
+                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6" /></svg>
+              </button>
             </div>
-            <div class="progress level-progress" role="progressbar" aria-label="XP vers le niveau 8" aria-valuemin="0" aria-valuemax="800" aria-valuenow="640">
-              <span class="progress-fill"></span>
-            </div>
-            <p class="card-help">Encore 160 XP pour passer au niveau 8</p>
-          </article>
-
-          <!-- Streak -->
-          <article class="glass-card streak-card" aria-labelledby="streak-title">
-            <div class="streak-ring" aria-hidden="true">
-              <span class="streak-flame">
-                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d="M12 2c.6 3.6 4.9 5.3 4.9 10.1A4.9 4.9 0 0 1 7.1 12c0-1.9.9-3.3 1.9-4.3 0 2 1 3.1 2.5 3.1-.1-3-1.1-5.3.5-8.8Z" />
-                </svg>
-              </span>
-              30
-            </div>
-            <div>
-              <p class="card-label">Série en cours</p>
-              <p id="streak-title" class="streak-title">30 jours d'affilée</p>
-              <p class="streak-sub">1 sept. – 30 sept.</p>
-            </div>
-          </article>
-        </div>
-
-        <!-- Activity -->
-        <article class="glass-card activity-card" aria-labelledby="activity-title">
-          <div class="card-head">
-            <h2 id="activity-title" class="card-title">Activité</h2>
-            <!-- Filled by js/profile.js from the activity data (contributions · jours actifs · période) -->
-            <p id="activity-meta" class="card-meta"></p>
+            <!-- Whole-year figure, filled by js/profile.js from the attendance data -->
+            <p id="presence-meta" class="card-meta presence-meta" aria-live="polite"></p>
           </div>
 
-          <!-- Heatmap: cells are generated by js/profile.js -->
-          <div class="hm-scroll">
-            <div class="hm">
-              <div id="heatmap-months" class="hm-months" aria-hidden="true"></div>
-              <div class="hm-days" aria-hidden="true">
-                <span>Lun</span><span></span><span>Mer</span><span></span><span>Ven</span><span></span><span>Dim</span>
-              </div>
-              <div id="heatmap-grid" class="hm-grid" role="img" aria-label="Contributions"></div>
-            </div>
-          </div>
+          <!-- Four month blocks at a time, 2 × 2 (two stacked on mobile), generated by js/profile.js from ATTENDANCE -->
+          <div id="presence-months" class="months" aria-live="polite"></div>
 
-          <div class="hm-legend">
-            <div class="hm-legend-scale">
-              <span>Moins</span>
-              <span class="hm-cell hm-l0" aria-hidden="true"></span>
-              <span class="hm-cell hm-l1" aria-hidden="true"></span>
-              <span class="hm-cell hm-l2" aria-hidden="true"></span>
-              <span class="hm-cell hm-l3" aria-hidden="true"></span>
-              <span class="hm-cell hm-l4" aria-hidden="true"></span>
-              <span>Plus</span>
-            </div>
-            <div class="hm-legend-scale">
-              <span class="hm-cell hm-l0 hm-streak" aria-hidden="true"></span>
-              <span>Jours du streak</span>
-            </div>
-          </div>
+          <ul class="legend" aria-label="Légende">
+            <li><span class="day is-present" aria-hidden="true"></span>Présente</li>
+            <li><span class="day is-late" aria-hidden="true"></span>En retard</li>
+            <li><span class="day is-absent" aria-hidden="true"></span>Absente</li>
+            <li><span class="day is-none" aria-hidden="true"></span>Pas de cours</li>
+          </ul>
         </article>
-      </section>
 
-      <!-- Recent projects -->
-      <section class="glass-card projects" aria-labelledby="projects-title">
-        <div class="card-head">
+        <article class="glass-card hero-reveal hero-reveal-3" aria-labelledby="projects-title">
           <h2 id="projects-title" class="card-title">Projets récents</h2>
-          <div class="filter-group" role="group" aria-label="Filtrer les projets">
-            <button type="button" class="filter-pill glass" data-filter="all" aria-pressed="true">Tous <span class="filter-count">3</span></button>
-            <button type="button" class="filter-pill glass" data-filter="validated" aria-pressed="false">Validés <span class="filter-count">2</span></button>
-            <button type="button" class="filter-pill glass" data-filter="pending" aria-pressed="false" data-owner-only>En attente <span class="filter-count">1</span></button>
-          </div>
-        </div>
 
-        <!-- Cards are generated by js/profile.js from the PROJECTS array -->
-        <div id="projects-grid" class="projects-grid"></div>
+          <!-- Cards are generated by js/profile.js from PROJECTS -->
+          <div id="projects-list" class="projects-list"></div>
+
+          <a href="#" class="more-link">
+            + more project
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6" /></svg>
+          </a>
+        </article>
       </section>
     </main>
   </div>
